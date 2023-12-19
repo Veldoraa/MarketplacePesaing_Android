@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/dashboard"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/keranjang"
+        android:icon="@drawable/product"
+        android:title="@string/keranjang"/>
+    <item
+        android:id="@+id/maps_pengguna"
+        android:icon="@drawable/location"
+        android:title="@string/Maps"/>
+    <item
+        android:id="@+id/orderan"
+        android:icon="@drawable/riwayat"
+        android:title="@string/orderan"/>
+    <item
+        android:id="@+id/akun_pengguna"
+        android:icon="@drawable/person"
+        android:title="@string/akun_pengguna"/>
+</menu>

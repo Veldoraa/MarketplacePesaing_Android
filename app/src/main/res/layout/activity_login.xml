@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.login.Login">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/title_Login"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:textAlignment="center"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/mobile_login_amico_1"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilemail"
+            style="@style/OutlinedRoundedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:hint="@string/email_string"
+            app:startIconDrawable="@drawable/ic_outline_email_24">
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilpassword"
+            style="@style/OutlinedRoundedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:hint="@string/password_string"
+            app:startIconDrawable="@drawable/ic_outline_lock_24"
+            app:passwordToggleEnabled="true">
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_login"
+            style="@style/OutlinedRoundedBox"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:textSize="18sp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/login_button"/>
+
+        <Button
+            android:id="@+id/btn_google"
+            style="@style/OutlinedRoundedBox"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:textSize="18sp"
+            android:fontFamily="@font/roboto_bold"
+            app:icon="@drawable/logo_google"
+            app:iconSize="20dp"
+            app:iconGravity="start"
+            android:text="@string/button_Google"/>
+
+        <!--        <com.google.android.gms.common.SignInButton-->
+        <!--            android:id="@+id/btn_google"-->
+        <!--            style="@style/OutlinedRoundedBox"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="42dp"-->
+        <!--            android:layout_marginStart="30dp"-->
+        <!--            android:layout_marginEnd="30dp"-->
+        <!--            android:layout_marginBottom="15dp"-->
+        <!--            android:text="@string/button_Google"-->
+        <!--            android:textAllCaps="false" />-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="29dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/text_milikakun"
+            android:textAlignment="center"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="16sp"
+            android:textColor="@color/green_pesaing"
+            android:text="@string/text_regis"
+            android:textAlignment="center"/>
+    </LinearLayout>
+
+</ScrollView>
