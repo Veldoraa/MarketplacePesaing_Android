@@ -52,9 +52,12 @@ class RecViewBarang : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun eventChangeListener() {
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            dbBarang.collection("Products").document(currentUser.uid)
+        // get by selectedID
+        val selectedId = intent.getStringExtra("idSelected")
+//
+//        val currentUser = auth.currentUser
+        if (selectedId != null) {
+            dbBarang.collection("Products").document(selectedId)
                 .addSnapshotListener { documentSnapshot, e ->
                     if (e != null) {
                         Log.w(TAG, "Listen failed.", e)

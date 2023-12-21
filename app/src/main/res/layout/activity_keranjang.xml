@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".data.recyclerView.RecyclerProdukActivity">
+    tools:context=".ui.cart.produk.Keranjang">
 
     <androidx.recyclerview.widget.RecyclerView
-        tools:listitem="@layout/list_produk"
-        android:id="@+id/recyclerViewProduk"
+        tools:listitem="@layout/list_cartproduk"
+        android:id="@+id/rv_itemcart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

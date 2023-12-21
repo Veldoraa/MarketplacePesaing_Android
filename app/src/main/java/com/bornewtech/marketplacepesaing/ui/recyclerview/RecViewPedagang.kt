@@ -41,7 +41,7 @@ class RecViewPedagang : AppCompatActivity() {
 
             // Start DetailBarang activity with selected item
             val intent = Intent(this, RecViewBarang::class.java)
-            intent.putExtra("selectedPedagang", pedagang)
+            intent.putExtra("idSelected", pedagang.userId)
             startActivity(intent)
         }
 
@@ -77,10 +77,10 @@ class RecViewPedagang : AppCompatActivity() {
 
     private fun loadProdukData(pedagangList: List<Pedagang>) {
         // Ambil ID pedagang dari pedagangList dan gunakan untuk query produk
-        val pedagangIds = pedagangList.map { it.userId ?: "" }
+//        val pedagangIds = pedagangList.map { it.userId ?: "" }
 
-        firestore.collection("Produk")
-            .whereIn("pedagangId", pedagangIds)
+        firestore.collection("Products")
+//            .whereIn("userId", pedagangIds)
             .get()
             .addOnSuccessListener { querySnapshot: QuerySnapshot ->
                 // Loop through each document in the query results

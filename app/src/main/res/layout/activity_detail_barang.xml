@@ -130,28 +130,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/category"/>
 
-    <Button
-        android:id="@+id/btn_updateBarang"
-        style="@style/OutlinedRoundedBox"
-        android:layout_width="150dp"
-        android:layout_height="66dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/update_produk"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.061"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_dltBarang"
+        android:id="@+id/btn_toKeranjang"
         style="@style/OutlinedRoundedBox"
-        android:layout_width="150dp"
+        android:layout_width="350dp"
         android:layout_height="66dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/hapus_produk"
+        android:layout_marginBottom="36dp"
+        android:text="@string/masukKeranjang"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.938"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

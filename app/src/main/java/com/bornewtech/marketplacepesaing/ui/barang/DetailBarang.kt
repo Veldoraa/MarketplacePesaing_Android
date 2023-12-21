@@ -8,6 +8,8 @@ import android.util.Log
 import android.widget.Toast
 import com.bornewtech.marketplacepesaing.data.firestoreDb.ProductItem
 import com.bornewtech.marketplacepesaing.databinding.ActivityDetailBarangBinding
+import com.bornewtech.marketplacepesaing.ui.cart.produk.Keranjang
+import com.bornewtech.marketplacepesaing.ui.profile.ResetPassword
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -47,23 +49,10 @@ class DetailBarang : AppCompatActivity() {
             .addOnFailureListener {
                 Toast.makeText(this, "Gagal Menarik Data", Toast.LENGTH_SHORT).show()
             }
-        binding.btnUpdateBarang.setOnClickListener {
-            val intent = Intent(this, EditBarang::class.java)
-            intent.putExtra("selectedItem", selectedItem)
-            startActivity(intent)
-            finish()
-        }
 
-        binding.btnDltBarang.setOnClickListener{
-            val userId = FirebaseAuth.getInstance().currentUser!!.uid
-            dbBarang.collection("Products").document(userId)
-                .delete()
-                .addOnSuccessListener {
-                    val intent = Intent(this, DetailBarang::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-                .addOnFailureListener { e -> Log.w(ContentValues.TAG, "Error deleting document", e) }
+        binding.btnToKeranjang.setOnClickListener {
+            startActivity(Intent(this, Keranjang::class.java))
+            finish()
         }
     }
 }

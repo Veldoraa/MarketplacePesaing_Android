@@ -94,4 +94,6 @@
     <string name="namaPedagang">Nama Pedagang</string>
     <string name="statusPedagang">Status Terkini</string>
     <string name="lokasiPedagang">Lokasi Terkini</string>
+    <string name="masukKeranjang">Masukkan Ke Keranjang</string>
+    <string name="jumlahbarang">Jumlah Barang</string>
 </resources>
