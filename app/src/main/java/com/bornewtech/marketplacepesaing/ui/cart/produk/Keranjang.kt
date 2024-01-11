@@ -15,6 +15,8 @@ class Keranjang : AppCompatActivity() {
     private lateinit var cartAdapter: AdapterKeranjang
     private lateinit var recyclerView: RecyclerView
 
+    private var totalCartPrice: Double = 0.0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityKeranjangBinding.inflate(layoutInflater)
@@ -52,26 +54,28 @@ class Keranjang : AppCompatActivity() {
         // Refresh RecyclerView
         cartAdapter.updateData(cartItems)
         cartAdapter.notifyDataSetChanged()
+
+        // Calculate total price and update display
+        calculateTotalCartPrice()
+        updateTotalPriceDisplay()
     }
 
     private fun handleIncrementClick(cartItem: CartItem) {
-        val updatedCartItem = cartItem.copy()  // Copy item untuk menghindari modifikasi langsung pada item yang ada di cartItems
+        val updatedCartItem = cartItem.copy()
         updatedCartItem.incrementQuantity()
         updateCart(updatedCartItem)
     }
 
     private fun handleDecrementClick(cartItem: CartItem) {
-        val updatedCartItem = cartItem.copy()  // Copy item untuk menghindari modifikasi langsung pada item yang ada di cartItems
+        val updatedCartItem = cartItem.copy()
         updatedCartItem.decrementQuantity()
         updateCart(updatedCartItem)
     }
 
-
-
     private fun updateCart(cartItem: CartItem) {
         // Update quantity pada setiap item langsung di dalam cartItems
         val updatedCartItems = cartItems.map {
-            val item = it.copy()  // Copy item untuk menghindari modifikasi langsung pada item yang ada di cartItems
+            val item = it.copy()
             if (item.productId == cartItem.productId) {
                 // Update quantity jika item ditemukan
                 item.productQuantity = cartItem.productQuantity
@@ -88,6 +92,20 @@ class Keranjang : AppCompatActivity() {
         // Refresh RecyclerView
         cartAdapter.updateData(updatedCartItems)
         cartAdapter.notifyDataSetChanged()
+
+        // Calculate total price and update display
+        calculateTotalCartPrice()
+        updateTotalPriceDisplay()
     }
 
+    private fun calculateTotalCartPrice() {
+        // Calculate total price based on the updatedCartItems
+        totalCartPrice = cartItems.sumByDouble { it.productPrice * it.productQuantity }
+    }
+
+    private fun updateTotalPriceDisplay() {
+        // Update the display of totalCartPrice wherever you want to show it
+        // For example, if you have a TextView to display the total price:
+        binding.tvTotalPrice.text = "Total: Rp ${totalCartPrice}"
+    }
 }
