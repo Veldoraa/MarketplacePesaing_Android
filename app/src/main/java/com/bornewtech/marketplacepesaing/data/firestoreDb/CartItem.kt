@@ -4,8 +4,20 @@ data class CartItem(
     val productId: String?,
     val productName: String,
     val productPrice: Double,
-    val productQuantity: Int
+    var productQuantity: Int // Ubah menjadi var agar dapat diubah
 ) {
+    // Fungsi untuk menambah kuantitas
+    fun incrementQuantity() {
+        productQuantity++
+    }
+
+    // Fungsi untuk mengurangi kuantitas
+    fun decrementQuantity() {
+        if (productQuantity > 0) {
+            productQuantity--
+        }
+    }
+
     override fun toString(): String {
         return "$productId,$productName,$productPrice,$productQuantity"
     }

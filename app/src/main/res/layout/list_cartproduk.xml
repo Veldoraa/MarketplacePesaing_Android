@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -64,6 +65,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginBottom="5dp"
+            android:clickable="true"
             android:src="@drawable/ic_plus"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -75,6 +77,7 @@
             android:layout_marginBottom="5dp"
             android:src="@drawable/ic_minus"
             app:layout_constraintTop_toTopOf="parent"
+            android:clickable="true"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="1dp"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -84,10 +87,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
-            app:layout_constraintTop_toBottomOf="@id/imageMinus"
-            app:layout_constraintEnd_toEndOf="@id/imageMinus"
-            app:layout_constraintBottom_toTopOf="@id/imagePlus"
-            app:layout_constraintStart_toStartOf="@id/imagePlus"/>
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toEndOf="@+id/imageCartProduct"
+            app:layout_constraintTop_toBottomOf="@+id/hargaBarangCart" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

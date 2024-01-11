@@ -12,7 +12,7 @@ import com.bornewtech.marketplacepesaing.databinding.ActivityKeranjangBinding
 class Keranjang : AppCompatActivity() {
     private lateinit var binding: ActivityKeranjangBinding
     private lateinit var cartItems: MutableList<CartItem>
-    private lateinit var adapter: AdapterKeranjang
+    private lateinit var cartAdapter: AdapterKeranjang
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,9 +24,15 @@ class Keranjang : AppCompatActivity() {
         cartItems = mutableListOf()
 
         recyclerView = findViewById(R.id.rvCart)
-        adapter = AdapterKeranjang(cartItems)
+        cartAdapter = AdapterKeranjang(
+            cartItems,
+            onItemClick = {},
+            onIncrementClick = { handleIncrementClick(it) },
+            onDecrementClick = { handleDecrementClick(it) }
+        )
+
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        recyclerView.adapter = cartAdapter
 
         retrieveCartItems()
     }
@@ -44,7 +50,44 @@ class Keranjang : AppCompatActivity() {
         cartItems = cartItemsSet.map { CartItem.fromString(it) }.toMutableList()
 
         // Refresh RecyclerView
-        adapter.updateData(cartItems)
-        adapter.notifyDataSetChanged()
+        cartAdapter.updateData(cartItems)
+        cartAdapter.notifyDataSetChanged()
     }
+
+    private fun handleIncrementClick(cartItem: CartItem) {
+        val updatedCartItem = cartItem.copy()  // Copy item untuk menghindari modifikasi langsung pada item yang ada di cartItems
+        updatedCartItem.incrementQuantity()
+        updateCart(updatedCartItem)
+    }
+
+    private fun handleDecrementClick(cartItem: CartItem) {
+        val updatedCartItem = cartItem.copy()  // Copy item untuk menghindari modifikasi langsung pada item yang ada di cartItems
+        updatedCartItem.decrementQuantity()
+        updateCart(updatedCartItem)
+    }
+
+
+
+    private fun updateCart(cartItem: CartItem) {
+        // Update quantity pada setiap item langsung di dalam cartItems
+        val updatedCartItems = cartItems.map {
+            val item = it.copy()  // Copy item untuk menghindari modifikasi langsung pada item yang ada di cartItems
+            if (item.productId == cartItem.productId) {
+                // Update quantity jika item ditemukan
+                item.productQuantity = cartItem.productQuantity
+            }
+            item
+        }.toMutableList()
+
+        // Simpan kembali ke SharedPreferences
+        val sharedPreferences = getSharedPreferences("Cart", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putStringSet("cartItems", updatedCartItems.map { it.toString() }.toMutableSet())
+        editor.apply()
+
+        // Refresh RecyclerView
+        cartAdapter.updateData(updatedCartItems)
+        cartAdapter.notifyDataSetChanged()
+    }
+
 }
