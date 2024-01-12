@@ -63,16 +63,23 @@ class Keranjang : AppCompatActivity() {
     private fun handleIncrementClick(cartItem: CartItem) {
         val updatedCartItem = cartItem.copy()
         updatedCartItem.incrementQuantity()
-        updateCart(updatedCartItem)
+        updateCart(updatedCartItem, false)
     }
 
     private fun handleDecrementClick(cartItem: CartItem) {
         val updatedCartItem = cartItem.copy()
         updatedCartItem.decrementQuantity()
-        updateCart(updatedCartItem)
+
+        // Check if quantity is less than or equal to 0, update cart to remove the item
+        if (updatedCartItem.productQuantity <= 0) {
+            updateCart(updatedCartItem, true)
+        } else {
+            updateCart(updatedCartItem, false)
+        }
     }
 
-    private fun updateCart(cartItem: CartItem) {
+
+    private fun updateCart(cartItem: CartItem, removeIfZero: Boolean) {
         // Update quantity pada setiap item langsung di dalam cartItems
         val updatedCartItems = cartItems.map {
             val item = it.copy()
@@ -83,19 +90,31 @@ class Keranjang : AppCompatActivity() {
             item
         }.toMutableList()
 
-        // Simpan kembali ke SharedPreferences
-        val sharedPreferences = getSharedPreferences("Cart", MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putStringSet("cartItems", updatedCartItems.map { it.toString() }.toMutableSet())
-        editor.apply()
+        // Remove the item only if removeIfZero is true and quantity is zero
+        if (removeIfZero && cartItem.productQuantity < 1) {
+            updatedCartItems.removeIf { it.productId == cartItem.productId }
+        }
 
-        // Refresh RecyclerView
+        // Simpan kembali ke SharedPreferences
+        saveCartToSharedPreferences(updatedCartItems)
+
+        // Update the adapter with the new data
         cartAdapter.updateData(updatedCartItems)
         cartAdapter.notifyDataSetChanged()
 
-        // Calculate total price and update display
+        // Recalculate total price and update display
         calculateTotalCartPrice()
         updateTotalPriceDisplay()
+    }
+
+
+
+    private fun saveCartToSharedPreferences(cartItems: List<CartItem>) {
+        // Simpan kembali ke SharedPreferences
+        val sharedPreferences = getSharedPreferences("Cart", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putStringSet("cartItems", cartItems.map { it.toString() }.toMutableSet())
+        editor.apply()
     }
 
     private fun calculateTotalCartPrice() {
