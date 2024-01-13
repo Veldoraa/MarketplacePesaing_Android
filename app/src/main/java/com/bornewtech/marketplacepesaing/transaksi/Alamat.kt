@@ -3,13 +3,13 @@ package com.bornewtech.marketplacepesaing.transaksi
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bornewtech.marketplacepesaing.R
-import com.bornewtech.marketplacepesaing.databinding.ActivityTransaksiBinding
+import com.bornewtech.marketplacepesaing.databinding.ActivityAlamatBinding
 
-class Transaksi : AppCompatActivity() {
-    private lateinit var binding: ActivityTransaksiBinding
+class Alamat : AppCompatActivity() {
+    private lateinit var binding: ActivityAlamatBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityTransaksiBinding.inflate(layoutInflater)
+        binding = ActivityAlamatBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
     }
