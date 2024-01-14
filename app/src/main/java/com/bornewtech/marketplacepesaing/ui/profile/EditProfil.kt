@@ -59,19 +59,22 @@ class EditProfil : AppCompatActivity() {
             requestLocationUpdates()
             val nameProfil = binding.inpNamaProfil.text.toString().trim()
             val noHpProfil = binding.inpNoHpProfil.text.toString().trim()
+            val emailProfil = binding.inpEmailProfil.text.toString().trim()
             val alamatProfil = binding.inpAlamatProfil.text.toString().trim()
 
             val profilMap = hashMapOf(
                 "namaLengkap" to nameProfil,
                 "noHpAktif" to noHpProfil,
+                "email" to emailProfil,
                 "alamatLengkap" to alamatProfil
             )
             val userId = FirebaseAuth.getInstance().currentUser!!.uid
-            dbProfil.collection("Profils").document(userId).set(profilMap)
+            dbProfil.collection("Pedagang").document(userId).set(profilMap)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Berhasil Memasukkan Data Profil", Toast.LENGTH_SHORT).show()
                     binding.inpNamaProfil.text
                     binding.inpNoHpProfil.text
+                    binding.inpAlamatProfil.text
                     binding.inpAlamatProfil.text
                 }
                 .addOnFailureListener {
@@ -223,16 +226,18 @@ class EditProfil : AppCompatActivity() {
 
     private fun setData(){
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
-        val refProfil = dbProfil.collection("Profils").document(userId)
+        val refProfil = dbProfil.collection("Pembeli").document(userId)
         refProfil.get()
-            .addOnSuccessListener {
-                if (it != null ){
-                    val nama = it.data?.get("namaLengkap").toString()
-                    val noHp = it.data?.get("noHpAktif").toString()
-                    val alamat = it.data?.get("alamatLengkap").toString()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    val nama = documentSnapshot.getString("namaLengkap")
+                    val noHp = documentSnapshot.getString("noHpAktif")
+                    val email = documentSnapshot.getString("email")
+                    val alamat = documentSnapshot.getString("alamatLengkap")
 
                     binding.inpNamaProfil.setText(nama)
                     binding.inpNoHpProfil.setText(noHp)
+                    binding.inpEmailProfil.setText(email)
                     binding.inpAlamatProfil.setText(alamat)
                 }
             }

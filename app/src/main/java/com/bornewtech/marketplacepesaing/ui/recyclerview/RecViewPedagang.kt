@@ -47,7 +47,7 @@ class RecViewPedagang : AppCompatActivity() {
 
         recyclerView.adapter = adapter
 
-        firestore.collection("Profils")
+        firestore.collection("Pedagang")
             .get()
             .addOnSuccessListener { result ->
                 val pedagangList = mutableListOf<Pedagang>()

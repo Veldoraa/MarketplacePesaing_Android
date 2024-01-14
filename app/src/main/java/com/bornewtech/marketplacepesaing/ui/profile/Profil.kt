@@ -49,7 +49,7 @@ class Profil : AppCompatActivity() {
 
     private fun setData() {
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
-        val refProfil = dbProfil.collection("Profils").document(userId)
+        val refProfil = dbProfil.collection("Pembeli").document(userId)
 
         refProfil.get()
             .addOnSuccessListener { documentSnapshot ->

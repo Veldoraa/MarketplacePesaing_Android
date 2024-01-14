@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -59,6 +59,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="phone"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilalamat"
+            style="@style/OutlinedRoundedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:hint="@string/phone_num_string"
+            app:startIconDrawable="@drawable/baseline_alamat">
+            <EditText
+                android:id="@+id/et_mitraalamat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textLongMessage"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -149,4 +167,4 @@
             android:text="@string/login_button"/>
     </LinearLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

@@ -1,6 +1,7 @@
 package com.bornewtech.marketplacepesaing.ui.cart.produk
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -8,12 +9,17 @@ import com.bornewtech.marketplacepesaing.R
 import com.bornewtech.marketplacepesaing.data.adapter.AdapterKeranjang
 import com.bornewtech.marketplacepesaing.data.firestoreDb.CartItem
 import com.bornewtech.marketplacepesaing.databinding.ActivityKeranjangBinding
+import com.bornewtech.marketplacepesaing.helper.FirestoreHelper
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class Keranjang : AppCompatActivity() {
     private lateinit var binding: ActivityKeranjangBinding
     private lateinit var cartItems: MutableList<CartItem>
     private lateinit var cartAdapter: AdapterKeranjang
     private lateinit var recyclerView: RecyclerView
+    private lateinit var firestoreKeranjang: FirebaseFirestore
+    private lateinit var authUser: FirebaseAuth
 
     private var totalCartPrice: Double = 0.0
 
@@ -21,6 +27,13 @@ class Keranjang : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityKeranjangBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Inisialisasi Firebase Firestore
+        firestoreKeranjang = FirebaseFirestore.getInstance()
+
+        authUser = FirebaseAuth.getInstance()
+
+
 
         // Inisialisasi cartItems sebagai MutableList
         cartItems = mutableListOf()
@@ -39,6 +52,8 @@ class Keranjang : AppCompatActivity() {
         retrieveCartItems()
     }
 
+    // ...
+
     private fun retrieveCartItems() {
         // Implementasikan logika untuk mengambil daftar item keranjang
         // dari SharedPreferences atau Firebase Database/Firestore
@@ -55,10 +70,67 @@ class Keranjang : AppCompatActivity() {
         cartAdapter.updateData(cartItems)
         cartAdapter.notifyDataSetChanged()
 
+        // Iterate through each cart item and fetch Pedagang ID based on Produk ID
+        cartItems.forEach { cartItem ->
+            fetchPedagangIdForCartItem(cartItem)
+        }
+
         // Calculate total price and update display
         calculateTotalCartPrice()
         updateTotalPriceDisplay()
+
+        // Save cart to Firestore after fetching Pedagang ID for each item
+        saveCartToFirestore(cartItems)
     }
+
+
+    private fun fetchPedagangIdForCartItem(cartItem: CartItem) {
+        // Dapatkan UID pengguna yang sedang login
+        val currentUser = authUser.currentUser
+        val uid = currentUser?.uid
+
+        // Pastikan UID tidak null sebelum melanjutkan
+        uid?.let {
+            // Mendapatkan Pedagang ID berdasarkan Produk ID dan UID
+            cartItem.productId?.let { productId ->
+                val productsCollection = firestoreKeranjang.collection("Products")
+                val productDocument = productsCollection.document(productId)
+
+                productDocument.get()
+                    .addOnSuccessListener { documentSnapshot ->
+                        if (documentSnapshot.exists()) {
+                            val pedagangId = documentSnapshot.getString("pedagangId")
+                            if (pedagangId != null) {
+                                // Jika Pedagang ID berhasil didapatkan, set Pedagang ID pada cartItem
+                                cartItem.pedagangId = pedagangId
+
+                                // Update cartItems list and save to SharedPreferences
+                                updateCart(cartItem, false)
+
+                                // Save cart to Firestore after fetching Pedagang ID for each item
+                                saveCartToFirestore(cartItems)
+                            } else {
+                                Log.e("Keranjang", "Pedagang ID is null for Produk ID: $productId")
+                            }
+                        } else {
+                            Log.e("Keranjang", "Document does not exist for Produk ID: $productId")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.e("Keranjang", "Error fetching document for Produk ID: $productId", exception)
+                    }
+            }
+        } ?: run {
+            Log.e("Keranjang", "User UID is null")
+        }
+    }
+
+
+
+
+
+// ...
+
 
     private fun handleIncrementClick(cartItem: CartItem) {
         val updatedCartItem = cartItem.copy()
@@ -116,6 +188,28 @@ class Keranjang : AppCompatActivity() {
         editor.putStringSet("cartItems", cartItems.map { it.toString() }.toMutableSet())
         editor.apply()
     }
+
+    private fun saveCartToFirestore(cartItems: List<CartItem>) {
+        // Dapatkan UID pengguna yang sedang login
+        val currentUser = authUser.currentUser
+        val uid = currentUser?.uid
+
+        if (uid != null) {
+            // Dapatkan referensi koleksi "carts" di Firestore berdasarkan UID pengguna
+            val cartsCollection = firestoreKeranjang.collection("Keranjang").document(uid)
+
+            // Simpan daftar item keranjang ke Firestore
+            cartsCollection.set(mapOf("cartItems" to cartItems.map { it.toMap() }))
+                .addOnSuccessListener {
+                    Log.d("Keranjang", "Keranjang berhasil disimpan ke Firestore")
+                }
+                .addOnFailureListener {
+                    Log.e("Keranjang", "Gagal menyimpan keranjang ke Firestore", it)
+                }
+        }
+    }
+
+
 
     private fun calculateTotalCartPrice() {
         // Calculate total price based on the updatedCartItems
