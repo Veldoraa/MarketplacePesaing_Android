@@ -36,7 +36,6 @@
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:fontFamily="@font/roboto_bold"
             android:text="Chair"
             android:textColor="@color/black"
@@ -87,10 +86,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginStart="8dp"
             app:layout_constraintStart_toEndOf="@+id/imageCartProduct"
             app:layout_constraintTop_toBottomOf="@+id/hargaBarangCart" />
+
+        <TextView
+            android:id="@+id/pedagangId"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Pedagang ID"
+            app:layout_constraintStart_toEndOf="@+id/imageCartProduct"
+            app:layout_constraintTop_toBottomOf="@+id/kuantitasBarangCart" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

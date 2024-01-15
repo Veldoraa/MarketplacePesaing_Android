@@ -6,8 +6,8 @@ data class CartItem(
     val productId: String?,
     val productName: String,
     val productPrice: Double,
-    var productQuantity: Int, // Ubah menjadi var agar dapat diubah
-    var pedagangId: String? = null // Tambahkan pedagangId dengan nilai default null
+    var productQuantity: Int,
+    var pedagangId: String? = null
 ) {
 
     // Tambahkan ini di dalam kelas CartItem

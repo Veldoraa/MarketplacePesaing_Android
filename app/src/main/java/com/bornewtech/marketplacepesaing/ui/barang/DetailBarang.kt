@@ -3,6 +3,7 @@ package com.bornewtech.marketplacepesaing.ui.barang
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.bornewtech.marketplacepesaing.data.firestoreDb.CartItem
 import com.bornewtech.marketplacepesaing.data.firestoreDb.ProductItem
@@ -29,24 +30,29 @@ class DetailBarang : AppCompatActivity() {
             binding.satuan.text = selectedItem.produkSatuan.toString()
             binding.stokBarang.text = selectedItem.produkStok.toString()
             binding.hargaBarang.text = selectedItem.produkHarga.toString()
-        }
 
+            val userId = FirebaseAuth.getInstance().currentUser!!.uid
+            val referensi = dbBarang.collection("Products").document(userId)
 
-        val userId = FirebaseAuth.getInstance().currentUser!!.uid
-        val referensi = dbBarang.collection("Products").document(userId)
-        //get Data ke detail barang
-        referensi.get()
-            .addOnSuccessListener { document ->
-                if (document != null && document.exists()) {
-                    val array = document.get("productList") as ArrayList<*>
-                    if (array.isNotEmpty()){
-                        array[0]
+            //get Data ke detail barang
+            referensi.get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        val array = document.get("productList") as ArrayList<Map<String, Any>>
+                        for (product in array) {
+                            val productId = product["produkId"].toString()
+                            if (productId.equals(selectedItem.produkId, ignoreCase = true)) {
+                                Log.d("DetailBarang", "Selected Product ID: $productId")
+                                // Lakukan sesuatu dengan productId yang sesuai di sini
+                                break
+                            }
+                        }
                     }
                 }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Gagal Menarik Data", Toast.LENGTH_SHORT).show()
+                }
         }
-            .addOnFailureListener {
-                Toast.makeText(this, "Gagal Menarik Data", Toast.LENGTH_SHORT).show()
-            }
 
         binding.btnToKeranjang.setOnClickListener {
             // Get the selected product item
@@ -58,7 +64,8 @@ class DetailBarang : AppCompatActivity() {
                 val cartItem = selectedItem.produkHarga?.let { prices ->
                     selectedItem.produkNama?.let { name ->
                         CartItem(
-                            productId = selectedItem.userId, // Adjust the property based on your ProductItem class
+                            productId = selectedItem.produkId,
+                            pedagangId = selectedItem.pedagangId,// Adjust the property based on your ProductItem class
                             productName = name,
                             productQuantity =  1, // Set the initial quantity as needed
                             productPrice = prices.toDouble() // Convert to double based on your ProductItem class
@@ -79,8 +86,8 @@ class DetailBarang : AppCompatActivity() {
                 Toast.makeText(this, "Failed to get selected item", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
+
     private fun saveCartItemToCart(cartItem: CartItem) {
         // Implementasikan penyimpanan item keranjang, misalnya dengan menggunakan SharedPreferences
         // Anda dapat menggunakan Firebase Database/Firestore jika memungkinkan

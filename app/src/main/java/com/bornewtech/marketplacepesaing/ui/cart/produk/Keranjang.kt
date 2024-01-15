@@ -85,13 +85,10 @@ class Keranjang : AppCompatActivity() {
 
 
     private fun fetchPedagangIdForCartItem(cartItem: CartItem) {
-        // Dapatkan UID pengguna yang sedang login
         val currentUser = authUser.currentUser
         val uid = currentUser?.uid
 
-        // Pastikan UID tidak null sebelum melanjutkan
         uid?.let {
-            // Mendapatkan Pedagang ID berdasarkan Produk ID dan UID
             cartItem.productId?.let { productId ->
                 val productsCollection = firestoreKeranjang.collection("Products")
                 val productDocument = productsCollection.document(productId)
@@ -101,7 +98,7 @@ class Keranjang : AppCompatActivity() {
                         if (documentSnapshot.exists()) {
                             val pedagangId = documentSnapshot.getString("pedagangId")
                             if (pedagangId != null) {
-                                // Jika Pedagang ID berhasil didapatkan, set Pedagang ID pada cartItem
+                                // Set Pedagang ID pada cartItem
                                 cartItem.pedagangId = pedagangId
 
                                 // Update cartItems list and save to SharedPreferences
@@ -125,11 +122,6 @@ class Keranjang : AppCompatActivity() {
         }
     }
 
-
-
-
-
-// ...
 
 
     private fun handleIncrementClick(cartItem: CartItem) {
@@ -156,8 +148,9 @@ class Keranjang : AppCompatActivity() {
         val updatedCartItems = cartItems.map {
             val item = it.copy()
             if (item.productId == cartItem.productId) {
-                // Update quantity jika item ditemukan
+                // Update quantity dan pedagangId jika item ditemukan
                 item.productQuantity = cartItem.productQuantity
+                item.pedagangId = cartItem.pedagangId
             }
             item
         }.toMutableList()

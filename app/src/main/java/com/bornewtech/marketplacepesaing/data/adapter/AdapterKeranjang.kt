@@ -1,6 +1,5 @@
 package com.bornewtech.marketplacepesaing.data.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,11 +17,14 @@ class AdapterKeranjang(
 ) : RecyclerView.Adapter<AdapterKeranjang.CartViewHolder>() {
 
     inner class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val pedagangId: TextView = itemView.findViewById(R.id.pedagangId)
         val productName: TextView = itemView.findViewById(R.id.namaBarangCart)
         val quantity: TextView = itemView.findViewById(R.id.kuantitasBarangCart)
         val price: TextView = itemView.findViewById(R.id.hargaBarangCart)
         val plusButton: ImageView = itemView.findViewById(R.id.imagePlus)
         val minusButton: ImageView = itemView.findViewById(R.id.imageMinus)
+
+        // Perbaiki deklarasi pedagangId di dalam CartViewHolder
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
@@ -34,6 +36,7 @@ class AdapterKeranjang(
         val currentItem = cartItems[position]
 
         // Bind data to the view
+        holder.pedagangId.text = "Pedagang ID: ${currentItem.pedagangId}"
         holder.productName.text = currentItem.productName
         holder.quantity.text = "Jumlah: ${currentItem.productQuantity}" // Menggunakan properti productQuantity
         holder.price.text = "Harga per Barang: Rp ${currentItem.productPrice}"
