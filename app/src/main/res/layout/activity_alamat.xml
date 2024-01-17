@@ -51,42 +51,9 @@
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
         app:layout_constraintTop_toBottomOf="@id/toolbarAddresses" />
 
-    <EditText
-        android:id="@+id/edAddressTitle"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/white_background"
-        android:fontFamily="@font/roboto_medium"
-        android:gravity="start|center_vertical"
-        android:hint="Lokasi Alamat, Misal: Rumah"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:singleLine="true"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/topLine" />
 
     <EditText
-        android:id="@+id/edFullName"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/white_background"
-        android:fontFamily="@font/roboto_medium"
-        android:gravity="start|center_vertical"
-        android:hint="Nama Anda"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:singleLine="true"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/edAddressTitle" />
-
-    <EditText
-        android:id="@+id/edStreet"
+        android:id="@+id/jalanRumah"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginTop="10dp"
@@ -100,79 +67,36 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@id/rightGuideline"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@id/edFullName" />
+        app:layout_constraintTop_toBottomOf="@id/topLine" />
 
-    <LinearLayout
-        android:id="@+id/linear"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-        app:layout_constraintHorizontal_bias="0.484"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/edPhone">
-
-        <EditText
-            android:id="@+id/edCity"
-            android:layout_width="378dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/white_background"
-            android:fontFamily="@font/roboto_medium"
-            android:gravity="start|center_vertical"
-            android:hint="City"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:singleLine="true"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/edState"
-            android:layout_width="378dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/white_background"
-            android:fontFamily="@font/roboto_medium"
-            android:gravity="start|center_vertical"
-            android:hint="State"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:singleLine="true"
-            android:textStyle="bold" />
-    </LinearLayout>
 
     <EditText
-        android:id="@+id/edPhone"
+        android:id="@+id/edCurrentLoc"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/white_background"
         android:fontFamily="@font/roboto_medium"
         android:gravity="start|center_vertical"
-        android:hint="No Hp"
+        android:hint="Lokasi Sekarang"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:phoneNumber="true"
         android:singleLine="true"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/edStreet" />
+        app:layout_constraintTop_toBottomOf="@+id/jalanRumah" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="30dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@id/rightGuideline"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@id/linear"
-        app:layout_constraintVertical_bias="0.494">
+        app:layout_constraintTop_toBottomOf="@id/edCurrentLoc">
 
         <Button
             android:id="@+id/btnhapusAlamat"
@@ -188,18 +112,29 @@
             app:layout_constraintTop_toBottomOf="@+id/totalBoxContainer" />
 
         <Button
-            android:id="@+id/btnsimpanAlamat"
+            android:id="@+id/btnupdateCurrentLoc"
             style="@style/OutlinedRoundedBox"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="20dp"
             android:layout_weight="1"
-            android:text="Simpan"
+            android:text="Dapatkan Lokasi"
             app:layout_constraintEnd_toStartOf="@+id/rightGuideLine"
             app:layout_constraintStart_toStartOf="@+id/leftGuideLine"
             app:layout_constraintTop_toBottomOf="@+id/totalBoxContainer" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnsimpanAlamat"
+        style="@style/OutlinedRoundedBox"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:layout_weight="1"
+        android:text="Simpan"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftGuideline"

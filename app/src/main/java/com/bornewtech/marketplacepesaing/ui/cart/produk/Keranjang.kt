@@ -1,5 +1,6 @@
 package com.bornewtech.marketplacepesaing.ui.cart.produk
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import com.bornewtech.marketplacepesaing.data.adapter.AdapterKeranjang
 import com.bornewtech.marketplacepesaing.data.firestoreDb.CartItem
 import com.bornewtech.marketplacepesaing.databinding.ActivityKeranjangBinding
 import com.bornewtech.marketplacepesaing.helper.FirestoreHelper
+import com.bornewtech.marketplacepesaing.ui.transaksi.Transaksi
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -33,6 +35,10 @@ class Keranjang : AppCompatActivity() {
 
         authUser = FirebaseAuth.getInstance()
 
+
+        binding.buttonPembayaran.setOnClickListener {
+            startActivity(Intent(this, Transaksi::class.java))
+        }
 
 
         // Inisialisasi cartItems sebagai MutableList
@@ -171,8 +177,6 @@ class Keranjang : AppCompatActivity() {
         calculateTotalCartPrice()
         updateTotalPriceDisplay()
     }
-
-
 
     private fun saveCartToSharedPreferences(cartItems: List<CartItem>) {
         // Simpan kembali ke SharedPreferences

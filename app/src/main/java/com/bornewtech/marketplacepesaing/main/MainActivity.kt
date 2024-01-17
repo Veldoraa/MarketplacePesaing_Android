@@ -6,7 +6,7 @@ import android.os.Bundle
 import com.bornewtech.marketplacepesaing.R
 import com.bornewtech.marketplacepesaing.databinding.ActivityMainBinding
 import com.bornewtech.marketplacepesaing.maps.Maps
-import com.bornewtech.marketplacepesaing.transaksi.Transaksi
+import com.bornewtech.marketplacepesaing.ui.transaksi.Transaksi
 import com.bornewtech.marketplacepesaing.ui.barang.recyclerview.RecViewBarang
 import com.bornewtech.marketplacepesaing.ui.fragment.home.HomeFragment
 import com.bornewtech.marketplacepesaing.ui.profile.Profil

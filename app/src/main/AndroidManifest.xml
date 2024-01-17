@@ -22,13 +22,13 @@
         android:theme="@style/Theme.MarketplacePesaing"
         tools:targetApi="31">
         <activity
-            android:name=".transaksi.Alamat"
+            android:name=".ui.transaksi.Alamat"
             android:exported="false" />
         <activity
             android:name=".ui.cart.produk.Keranjang"
             android:exported="false" />
         <activity
-            android:name=".transaksi.Transaksi"
+            android:name=".ui.transaksi.Transaksi"
             android:exported="false" />
         <activity
             android:name=".ui.recyclerview.RecViewPedagang"

@@ -1,5 +1,6 @@
-package com.bornewtech.marketplacepesaing.transaksi
+package com.bornewtech.marketplacepesaing.ui.transaksi
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bornewtech.marketplacepesaing.R
@@ -12,5 +13,9 @@ class Transaksi : AppCompatActivity() {
         binding = ActivityTransaksiBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+
+        binding.btnImgAddAlamat.setOnClickListener {
+            startActivity(Intent(this, Alamat::class.java))
+        }
     }
 }

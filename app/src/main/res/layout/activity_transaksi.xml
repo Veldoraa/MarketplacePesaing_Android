@@ -98,7 +98,7 @@
             app:drawableLeftCompat="@drawable/ic_location" />
 
         <ImageView
-            android:id="@+id/imageAddAddress"
+            android:id="@+id/btnImgAddAlamat"
             android:layout_width="15dp"
             android:layout_height="15dp"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline"

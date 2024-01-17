@@ -23,8 +23,6 @@ class AdapterKeranjang(
         val price: TextView = itemView.findViewById(R.id.hargaBarangCart)
         val plusButton: ImageView = itemView.findViewById(R.id.imagePlus)
         val minusButton: ImageView = itemView.findViewById(R.id.imageMinus)
-
-        // Perbaiki deklarasi pedagangId di dalam CartViewHolder
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
