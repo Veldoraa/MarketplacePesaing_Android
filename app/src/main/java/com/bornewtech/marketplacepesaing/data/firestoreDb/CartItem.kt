@@ -13,7 +13,7 @@ data class CartItem(
     // Tambahkan ini di dalam kelas CartItem
     fun toMap(): Map<String, Any?> {
         return mapOf(
-            "producytId" to productId,
+            "produkId" to productId,
             "productName" to productName,
             "productQuantity" to productQuantity,
             "productPrice" to productPrice,

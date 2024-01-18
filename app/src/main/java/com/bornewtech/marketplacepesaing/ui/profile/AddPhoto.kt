@@ -18,6 +18,7 @@ class AddPhoto : AppCompatActivity() {
     private lateinit var binding: ActivityAddPhotoBinding
     private var currentImageUri: Uri? = null
     private var storageRef = Firebase.storage
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddPhotoBinding.inflate(layoutInflater)
@@ -27,7 +28,6 @@ class AddPhoto : AppCompatActivity() {
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.cameraButton.setOnClickListener { startCamera() }
         binding.uploadButton.setOnClickListener { uploadImage() }
-
     }
 
     // Memulai dengan Galeri
@@ -40,6 +40,7 @@ class AddPhoto : AppCompatActivity() {
     ) { uri: Uri? ->
         if (uri != null) {
             currentImageUri = uri
+            showImage()
         } else {
             Log.d("Photo Picker", "No media selected")
         }
@@ -68,28 +69,42 @@ class AddPhoto : AppCompatActivity() {
     }
 
     // upload image
-    private fun uploadImage(){
-        // Nambah Gambar Barang
-        currentImageUri?.let { uri ->
-            storageRef.getReference("Gambar Profil")
-                .child(System.currentTimeMillis().toString())
-                .putFile(uri)
-                .addOnSuccessListener {
-                    val userId = FirebaseAuth.getInstance().currentUser!!.uid
-                    val mapImage = mapOf(
-                        "url" to it.toString()
-                    )
-                    val databaseReferences =
-                        FirebaseDatabase.getInstance().getReference("gambarProfil")
-                    databaseReferences.child(userId).setValue(mapImage)
-                        .addOnSuccessListener {
-                            Toast.makeText(this, "Sukses", Toast.LENGTH_SHORT).show()
-                        }
-                        .addOnFailureListener { error ->
-                            Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
-                        }
-                }
+    private fun uploadImage() {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            currentImageUri?.let { uri ->
+                val userId = user.uid
+                val storageReference = Firebase.storage.reference.child("ProfilePembeli")
+                    .child(userId)
+                    .child(System.currentTimeMillis().toString())
 
+                storageReference.putFile(uri)
+                    .addOnSuccessListener { taskSnapshot ->
+                        storageReference.downloadUrl.addOnSuccessListener { downloadUri ->
+                            val mapImage = mapOf(
+                                "url" to downloadUri.toString()
+                            )
+                            val databaseReferences =
+                                FirebaseDatabase.getInstance().getReference("profilsImg")
+                            databaseReferences.child(userId).setValue(mapImage)
+                                .addOnSuccessListener {
+                                    Toast.makeText(this, "Sukses", Toast.LENGTH_SHORT).show()
+                                }
+                                .addOnFailureListener { error ->
+                                    Toast.makeText(
+                                        this,
+                                        "Gagal mengupload gambar: ${error.message}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                        }
+                    }
+                    .addOnFailureListener { error ->
+                        Toast.makeText(this, "Gagal mengupload gambar: ${error.message}", Toast.LENGTH_SHORT).show()
+                    }
+            }
+        } else {
+            Toast.makeText(this, "User tidak terautentikasi", Toast.LENGTH_SHORT).show()
         }
     }
 }

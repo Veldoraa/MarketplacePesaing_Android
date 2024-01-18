@@ -139,16 +139,16 @@
             android:backgroundTint="@color/gray200" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvProducts"
+            android:id="@+id/rvProductsTransaksi"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@id/leftGuideline"
             app:layout_constraintTop_toBottomOf="@id/middleLine"
-            tools:listitem="@layout/billing_products_rv_item"
-            android:orientation="horizontal"
+            tools:listitem="@layout/list_transaksi"
+            android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <View
@@ -157,7 +157,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/white_background"
-            app:layout_constraintTop_toBottomOf="@id/rvProducts"
+            app:layout_constraintTop_toBottomOf="@id/rvProductsTransaksi"
             app:layout_constraintStart_toStartOf="@id/leftGuideline"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline"
             android:backgroundTint="@color/gray200"
@@ -169,7 +169,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:background="@drawable/total_box_background"
-            app:layout_constraintTop_toBottomOf="@id/rvProducts"
+            app:layout_constraintTop_toBottomOf="@id/rvProductsTransaksi"
             app:layout_constraintStart_toStartOf="@id/leftGuideline"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline">
 
