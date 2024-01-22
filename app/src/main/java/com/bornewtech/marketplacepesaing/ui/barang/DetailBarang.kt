@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.bornewtech.marketplacepesaing.R
 import com.bornewtech.marketplacepesaing.data.firestoreDb.CartItem
 import com.bornewtech.marketplacepesaing.data.firestoreDb.ProductItem
 import com.bornewtech.marketplacepesaing.databinding.ActivityDetailBarangBinding
 import com.bornewtech.marketplacepesaing.ui.cart.produk.Keranjang
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -16,6 +18,7 @@ import com.google.firebase.ktx.Firebase
 class DetailBarang : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBarangBinding
     private var dbBarang = Firebase.firestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBarangBinding.inflate(layoutInflater)
@@ -30,6 +33,12 @@ class DetailBarang : AppCompatActivity() {
             binding.satuan.text = selectedItem.produkSatuan.toString()
             binding.stokBarang.text = selectedItem.produkStok.toString()
             binding.hargaBarang.text = selectedItem.produkHarga.toString()
+
+            // Load image using Glide
+            Glide.with(this)
+                .load(selectedItem.imageUrl)
+                .placeholder(R.drawable.image_baseline)
+                .into(binding.imgBarang)
 
             val userId = FirebaseAuth.getInstance().currentUser!!.uid
             val referensi = dbBarang.collection("Products").document(userId)
@@ -65,10 +74,10 @@ class DetailBarang : AppCompatActivity() {
                     selectedItem.produkNama?.let { name ->
                         CartItem(
                             productId = selectedItem.produkId,
-                            pedagangId = selectedItem.pedagangId,// Adjust the property based on your ProductItem class
+                            pedagangId = selectedItem.pedagangId,
                             productName = name,
-                            productQuantity =  1, // Set the initial quantity as needed
-                            productPrice = prices.toDouble() // Convert to double based on your ProductItem class
+                            productQuantity =  1,
+                            productPrice = prices.toDouble()
                         )
                     }
                 }

@@ -52,10 +52,7 @@ class RecViewBarang : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun eventChangeListener() {
-        // get by selectedID
         val selectedId = intent.getStringExtra("idSelected")
-//
-//        val currentUser = auth.currentUser
         if (selectedId != null) {
             dbBarang.collection("Products").document(selectedId)
                 .addSnapshotListener { documentSnapshot, e ->
@@ -67,11 +64,13 @@ class RecViewBarang : AppCompatActivity() {
                     if (documentSnapshot != null && documentSnapshot.exists()) {
                         val productList = documentSnapshot.toObject(Products::class.java)
                         if (productList != null) {
-                            // Access the productList directly
                             val productListData = productList.productList
-                            // Update RecyclerView data and refresh
                             productListData?.let {
-                                adapterProduk.updateData(it)
+                                // Convert Firestore data to include image URL
+                                val productListWithImageUrl = it.map { productItem ->
+                                    productItem.copy(imageUrl = productItem.imageUrl)
+                                }
+                                adapterProduk.updateData(productListWithImageUrl)
                                 adapterProduk.notifyDataSetChanged()
                             }
                         } else {
