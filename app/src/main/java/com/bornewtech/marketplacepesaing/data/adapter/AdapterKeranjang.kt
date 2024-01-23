@@ -12,8 +12,8 @@ import com.bornewtech.marketplacepesaing.data.firestoreDb.CartItem
 class AdapterKeranjang(
     private val cartItems: MutableList<CartItem>,
     private val onItemClick: (CartItem) -> Unit = {},
-    private val onIncrementClick: (CartItem) -> Unit = {},
-    private val onDecrementClick: (CartItem) -> Unit = {}
+    private val onIncrementClick: (CartItem, Int) -> Unit = { _, _ -> },
+    private val onDecrementClick: (CartItem, Int) -> Unit = { _, _ -> }
 ) : RecyclerView.Adapter<AdapterKeranjang.CartViewHolder>() {
 
     inner class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -45,12 +45,11 @@ class AdapterKeranjang(
         }
 
         holder.plusButton.setOnClickListener {
-            onIncrementClick(currentItem)
+            onIncrementClick(currentItem, position)
         }
 
-        // Handle minus button click
         holder.minusButton.setOnClickListener {
-            onDecrementClick(currentItem)
+            onDecrementClick(currentItem, position)
         }
     }
 

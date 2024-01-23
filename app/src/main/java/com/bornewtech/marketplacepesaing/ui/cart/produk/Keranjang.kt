@@ -10,7 +10,6 @@ import com.bornewtech.marketplacepesaing.R
 import com.bornewtech.marketplacepesaing.data.adapter.AdapterKeranjang
 import com.bornewtech.marketplacepesaing.data.firestoreDb.CartItem
 import com.bornewtech.marketplacepesaing.databinding.ActivityKeranjangBinding
-import com.bornewtech.marketplacepesaing.helper.FirestoreHelper
 import com.bornewtech.marketplacepesaing.ui.transaksi.Transaksi
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,26 +29,24 @@ class Keranjang : AppCompatActivity() {
         binding = ActivityKeranjangBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Inisialisasi Firebase Firestore
+        // Initialize Firebase Firestore
         firestoreKeranjang = FirebaseFirestore.getInstance()
 
         authUser = FirebaseAuth.getInstance()
-
 
         binding.buttonPembayaran.setOnClickListener {
             startActivity(Intent(this, Transaksi::class.java))
         }
 
-
-        // Inisialisasi cartItems sebagai MutableList
+        // Initialize cartItems as MutableList
         cartItems = mutableListOf()
 
         recyclerView = findViewById(R.id.rvCart)
         cartAdapter = AdapterKeranjang(
             cartItems,
             onItemClick = {},
-            onIncrementClick = { handleIncrementClick(it) },
-            onDecrementClick = { handleDecrementClick(it) }
+            onIncrementClick = { cartItem, position -> handleIncrementClick(cartItem) },
+            onDecrementClick = { cartItem, position -> handleDecrementClick(cartItem) }
         )
 
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -58,14 +55,12 @@ class Keranjang : AppCompatActivity() {
         retrieveCartItems()
     }
 
-    // ...
-
     private fun retrieveCartItems() {
-        // Implementasikan logika untuk mengambil daftar item keranjang
-        // dari SharedPreferences atau Firebase Database/Firestore
-        // dan simpan dalam list cartItems.
+        // Implement the logic to retrieve the list of cart items
+        // from SharedPreferences or Firebase Database/Firestore
+        // and store it in the cartItems list.
 
-        // Contoh dengan SharedPreferences:
+        // Example with SharedPreferences:
         val sharedPreferences = getSharedPreferences("Cart", MODE_PRIVATE)
         val cartItemsSet = sharedPreferences.getStringSet("cartItems", mutableSetOf()) ?: emptySet()
 
@@ -89,7 +84,6 @@ class Keranjang : AppCompatActivity() {
         saveCartToFirestore(cartItems)
     }
 
-
     private fun fetchPedagangIdForCartItem(cartItem: CartItem) {
         val currentUser = authUser.currentUser
         val uid = currentUser?.uid
@@ -104,14 +98,11 @@ class Keranjang : AppCompatActivity() {
                         if (documentSnapshot.exists()) {
                             val pedagangId = documentSnapshot.getString("pedagangId")
                             if (pedagangId != null) {
-                                // Set Pedagang ID pada cartItem
+                                // Set Pedagang ID on cartItem
                                 cartItem.pedagangId = pedagangId
 
                                 // Update cartItems list and save to SharedPreferences
                                 updateCart(cartItem, false)
-
-                                // Save cart to Firestore after fetching Pedagang ID for each item
-                                saveCartToFirestore(cartItems)
                             } else {
                                 Log.e("Keranjang", "Pedagang ID is null for Produk ID: $productId")
                             }
@@ -128,27 +119,68 @@ class Keranjang : AppCompatActivity() {
         }
     }
 
-
-
     private fun handleIncrementClick(cartItem: CartItem) {
-        val updatedCartItem = cartItem.copy()
-        updatedCartItem.incrementQuantity()
-        updateCart(updatedCartItem, false)
+        val currentUser = authUser.currentUser
+
+        if (currentUser != null) {
+            val pembeliId = currentUser.uid
+
+            // Find the index of the item in the cartItems list
+            val index = cartItems.indexOfFirst { it.productId == cartItem.productId }
+
+            if (index != -1) {
+                // Update the quantity of the existing item directly
+                cartItems[index].incrementQuantity()
+
+                // Set the pembeliId for the existing item
+                cartItems[index].pembeliId = pembeliId
+
+                // Update the adapter with the new data
+                cartAdapter.updateData(cartItems)
+                cartAdapter.notifyDataSetChanged()
+
+                // Save cart to Firestore after fetching Pedagang ID for each item
+                saveCartToFirestore(cartItems)
+            }
+        } else {
+            Log.e("Keranjang", "User is not signed in during increment click")
+        }
     }
 
     private fun handleDecrementClick(cartItem: CartItem) {
-        val updatedCartItem = cartItem.copy()
-        updatedCartItem.decrementQuantity()
+        val currentUser = authUser.currentUser
 
-        // Check if quantity is less than or equal to 0
-        if (updatedCartItem.productQuantity <= 0) {
-            // Remove the item from Firestore and SharedPreferences
-            removeItemFromFirestoreAndSharedPreferences(cartItem)
+        if (currentUser != null) {
+            val pembeliId = currentUser.uid
+
+            // Find the index of the item in the cartItems list
+            val index = cartItems.indexOfFirst { it.productId == cartItem.productId }
+
+            if (index != -1) {
+                // Update the quantity of the existing item directly
+                cartItems[index].decrementQuantity()
+
+                // Set the pembeliId for the existing item
+                cartItems[index].pembeliId = pembeliId
+
+                // Check if quantity is less than or equal to 0
+                if (cartItems[index].productQuantity <= 0) {
+                    // Remove the item from Firestore and SharedPreferences
+                    removeItemFromFirestoreAndSharedPreferences(cartItem)
+                } else {
+                    // Update the adapter with the new data
+                    cartAdapter.updateData(cartItems)
+                    cartAdapter.notifyDataSetChanged()
+
+                    // Save cart to Firestore after fetching Pedagang ID for each item
+                    saveCartToFirestore(cartItems)
+                }
+            }
         } else {
-            // Update the cart without removing the item
-            updateCart(updatedCartItem, false)
+            Log.e("Keranjang", "User is not signed in during decrement click")
         }
     }
+
 
     private fun removeItemFromFirestoreAndSharedPreferences(cartItem: CartItem) {
         // Remove the item from Firestore
@@ -193,23 +225,24 @@ class Keranjang : AppCompatActivity() {
     }
 
     private fun updateCart(cartItem: CartItem, removeIfZero: Boolean) {
-        // Update quantity pada setiap item langsung di dalam cartItems
+        // Update quantity for each item directly within cartItems
         val updatedCartItems = cartItems.map {
             val item = it.copy()
             if (item.productId == cartItem.productId) {
-                // Update quantity dan pedagangId jika item ditemukan
+                // Update quantity, pedagangId, and pembeliId if item is found
                 item.productQuantity = cartItem.productQuantity
                 item.pedagangId = cartItem.pedagangId
+                item.pembeliId = cartItem.pembeliId
             }
             item
         }.toMutableList()
 
         // Remove the item only if removeIfZero is true and quantity is zero
         if (removeIfZero && cartItem.productQuantity < 1) {
-            updatedCartItems.removeIf { it.productId == cartItem.productId }
+            updatedCartItems.remove(cartItem)
         }
 
-        // Simpan kembali ke SharedPreferences
+        // Save back to SharedPreferences
         saveCartToSharedPreferences(updatedCartItems)
 
         // Update the adapter with the new data
@@ -220,9 +253,8 @@ class Keranjang : AppCompatActivity() {
         saveCartToFirestore(updatedCartItems)
     }
 
-
     private fun saveCartToSharedPreferences(cartItems: List<CartItem>) {
-        // Simpan kembali ke SharedPreferences
+        // Save back to SharedPreferences
         val sharedPreferences = getSharedPreferences("Cart", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putStringSet("cartItems", cartItems.map { it.toString() }.toMutableSet())
@@ -230,26 +262,24 @@ class Keranjang : AppCompatActivity() {
     }
 
     private fun saveCartToFirestore(cartItems: List<CartItem>) {
-        // Dapatkan UID pengguna yang sedang login
+        // Get the UID of the currently logged-in user
         val currentUser = authUser.currentUser
         val uid = currentUser?.uid
 
         if (uid != null) {
-            // Dapatkan referensi koleksi "carts" di Firestore berdasarkan UID pengguna
+            // Get the Firestore collection reference "carts" based on the user UID
             val cartsCollection = firestoreKeranjang.collection("Keranjang").document(uid)
 
-            // Simpan daftar item keranjang ke Firestore
+            // Save the list of cart items to Firestore
             cartsCollection.set(mapOf("cartItems" to cartItems.map { it.toMap() }))
                 .addOnSuccessListener {
-                    Log.d("Keranjang", "Keranjang berhasil disimpan ke Firestore")
+                    Log.d("Keranjang", "Cart successfully saved to Firestore")
                 }
                 .addOnFailureListener {
-                    Log.e("Keranjang", "Gagal menyimpan keranjang ke Firestore", it)
+                    Log.e("Keranjang", "Failed to save cart to Firestore", it)
                 }
         }
     }
-
-
 
     private fun calculateTotalCartPrice() {
         // Calculate total price based on the updatedCartItems
