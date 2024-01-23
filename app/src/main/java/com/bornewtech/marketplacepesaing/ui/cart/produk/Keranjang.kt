@@ -22,7 +22,7 @@ class Keranjang : AppCompatActivity() {
     private lateinit var firestoreKeranjang: FirebaseFirestore
     private lateinit var authUser: FirebaseAuth
 
-    private var totalCartPrice: Double = 0.0
+    private var totalCartPrice: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,6 +141,10 @@ class Keranjang : AppCompatActivity() {
 
                 // Save cart to Firestore after fetching Pedagang ID for each item
                 saveCartToFirestore(cartItems)
+
+                // Calculate total price and update display
+                calculateTotalCartPrice()
+                updateTotalPriceDisplay()
             }
         } else {
             Log.e("Keranjang", "User is not signed in during increment click")
@@ -174,12 +178,17 @@ class Keranjang : AppCompatActivity() {
 
                     // Save cart to Firestore after fetching Pedagang ID for each item
                     saveCartToFirestore(cartItems)
+
+                    // Calculate total price and update display
+                    calculateTotalCartPrice()
+                    updateTotalPriceDisplay()
                 }
             }
         } else {
             Log.e("Keranjang", "User is not signed in during decrement click")
         }
     }
+
 
 
     private fun removeItemFromFirestoreAndSharedPreferences(cartItem: CartItem) {
@@ -283,12 +292,12 @@ class Keranjang : AppCompatActivity() {
 
     private fun calculateTotalCartPrice() {
         // Calculate total price based on the updatedCartItems
-        totalCartPrice = cartItems.sumByDouble { it.productPrice * it.productQuantity }
+        totalCartPrice = cartItems.sumByDouble { it.productPrice * it.productQuantity }.toInt()
     }
 
     private fun updateTotalPriceDisplay() {
         // Update the display of totalCartPrice wherever you want to show it
         // For example, if you have a TextView to display the total price:
-        binding.tvTotalPrice.text = "Total: Rp ${totalCartPrice}"
+        binding.tvTotalPrice.text = "Total: Rp ${totalCartPrice},00"
     }
 }
