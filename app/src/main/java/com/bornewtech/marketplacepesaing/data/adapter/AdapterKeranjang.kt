@@ -39,9 +39,6 @@ class AdapterKeranjang(
         holder.quantity.text = "Jumlah: ${currentItem.productQuantity}" // Menggunakan properti productQuantity
         holder.price.text = "Harga per Barang: Rp ${currentItem.productPrice}"
 
-        // Tambahkan log untuk memeriksa nilai quantity
-//        Log.d("AdapterKeranjang", "Quantity: ${currentItem.productQuantity}")
-
         // Handle item click
         holder.itemView.setOnClickListener {
             onItemClick(currentItem)
@@ -66,5 +63,13 @@ class AdapterKeranjang(
         cartItems.clear()
         cartItems.addAll(newCartItems)
         notifyDataSetChanged()
+    }
+
+    // Tambahkan fungsi untuk menghapus item dari RecyclerView
+    fun removeItem(position: Int) {
+        if (position in 0 until itemCount) {
+            cartItems.removeAt(position)
+            notifyItemRemoved(position)
+        }
     }
 }

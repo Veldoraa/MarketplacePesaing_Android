@@ -75,6 +75,7 @@ class DetailBarang : AppCompatActivity() {
                         CartItem(
                             productId = selectedItem.produkId,
                             pedagangId = selectedItem.pedagangId,
+                            pembeliId = selectedItem.pembeliId,
                             productName = name,
                             productQuantity =  1,
                             productPrice = prices.toDouble()
@@ -112,4 +113,18 @@ class DetailBarang : AppCompatActivity() {
         editor.putStringSet("cartItems", cartItems)
         editor.apply()
     }
+
+//    private fun saveCartItemToCart(cartItem: CartItem) {
+//        // Simpan CartItem ke Firestore
+//        val db = Firebase.firestore
+//        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+//
+//        db.collection("Users").document(userId).collection("Keranjang").add(cartItem)
+//            .addOnSuccessListener {
+//                Toast.makeText(this, "Barang ditambahkan ke keranjang", Toast.LENGTH_SHORT).show()
+//            }
+//            .addOnFailureListener {
+//                Toast.makeText(this, "Gagal menambahkan barang ke keranjang", Toast.LENGTH_SHORT).show()
+//            }
+//    }
 }

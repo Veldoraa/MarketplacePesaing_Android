@@ -140,14 +140,57 @@ class Keranjang : AppCompatActivity() {
         val updatedCartItem = cartItem.copy()
         updatedCartItem.decrementQuantity()
 
-        // Check if quantity is less than or equal to 0, update cart to remove the item
+        // Check if quantity is less than or equal to 0
         if (updatedCartItem.productQuantity <= 0) {
-            updateCart(updatedCartItem, true)
+            // Remove the item from Firestore and SharedPreferences
+            removeItemFromFirestoreAndSharedPreferences(cartItem)
         } else {
+            // Update the cart without removing the item
             updateCart(updatedCartItem, false)
         }
     }
 
+    private fun removeItemFromFirestoreAndSharedPreferences(cartItem: CartItem) {
+        // Remove the item from Firestore
+        removeItemFromFirestore(cartItem)
+
+        // Remove the item from SharedPreferences
+        removeItemFromSharedPreferences(cartItem)
+    }
+
+    private fun removeItemFromFirestore(cartItem: CartItem) {
+        val currentUser = authUser.currentUser
+        val uid = currentUser?.uid
+
+        if (uid != null && cartItem.productId != null) {
+            val cartsCollection = firestoreKeranjang.collection("Keranjang").document(uid)
+
+            // Filter out the item to be removed from Firestore
+            val updatedCartItems = cartItems.filter { it.productId != cartItem.productId }
+
+            // Update Firestore with the new cartItems (excluding the removed item)
+            cartsCollection.set(mapOf("cartItems" to updatedCartItems.map { it.toMap() }))
+                .addOnSuccessListener {
+                    Log.d("Keranjang", "Item removed from Firestore successfully")
+
+                    // Update local cartItems and UI after successful Firestore update
+                    cartItems = updatedCartItems.toMutableList()
+                    cartAdapter.updateData(cartItems)
+                    calculateTotalCartPrice()
+                    updateTotalPriceDisplay()
+                }
+                .addOnFailureListener {
+                    Log.e("Keranjang", "Failed to remove item from Firestore", it)
+                }
+        }
+    }
+
+    private fun removeItemFromSharedPreferences(cartItem: CartItem) {
+        val updatedCartItems = cartItems.filter { it.productId != cartItem.productId }
+
+        // Update SharedPreferences with the new cartItems (excluding the removed item)
+        saveCartToSharedPreferences(updatedCartItems)
+    }
 
     private fun updateCart(cartItem: CartItem, removeIfZero: Boolean) {
         // Update quantity pada setiap item langsung di dalam cartItems
@@ -173,10 +216,10 @@ class Keranjang : AppCompatActivity() {
         cartAdapter.updateData(updatedCartItems)
         cartAdapter.notifyDataSetChanged()
 
-        // Recalculate total price and update display
-        calculateTotalCartPrice()
-        updateTotalPriceDisplay()
+        // Save cart to Firestore after fetching Pedagang ID for each item
+        saveCartToFirestore(updatedCartItems)
     }
+
 
     private fun saveCartToSharedPreferences(cartItems: List<CartItem>) {
         // Simpan kembali ke SharedPreferences

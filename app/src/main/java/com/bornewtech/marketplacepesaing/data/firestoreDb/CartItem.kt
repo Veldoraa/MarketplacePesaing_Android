@@ -7,17 +7,20 @@ data class CartItem(
     val productName: String,
     val productPrice: Double,
     var productQuantity: Int,
-    var pedagangId: String? = null
+    var pedagangId: String?,
+    var pembeliId: String?
 ) {
 
     // Tambahkan ini di dalam kelas CartItem
+    // Updated toMap function
     fun toMap(): Map<String, Any?> {
         return mapOf(
             "produkId" to productId,
             "productName" to productName,
             "productQuantity" to productQuantity,
             "productPrice" to productPrice,
-            "pedagangId" to pedagangId
+            "pedagangId" to pedagangId,
+            "pembeliId" to pembeliId
         )
     }
 
@@ -34,7 +37,7 @@ data class CartItem(
     }
 
     override fun toString(): String {
-        return "$productId,$productName,$productPrice,$productQuantity,$pedagangId"
+        return "$productId,$productName,$productPrice,$productQuantity,$pedagangId,$pembeliId"
     }
 
     companion object {
@@ -47,12 +50,13 @@ data class CartItem(
                     splitData[1],          // Index 1
                     splitData[2].toDoubleOrNull() ?: 0.0, // Index 2, handle potential null
                     splitData[3].toIntOrNull() ?: 0,    // Index 3, handle potential null
-                    splitData.getOrNull(4)             // Index 4, handle potential null
+                    splitData.getOrNull(4),             // Index 4, handle potential null
+                    splitData.getOrNull(5)
                 )
             } catch (e: Exception) {
                 // Handle the case where conversion fails, log the error, and return a default CartItem.
                 Log.e("CartItem", "Error parsing CartItem from string: $data", e)
-                CartItem(null, "", 0.0, 0, null)
+                CartItem(null, "", 0.0, 0, null, null)
             }
         }
     }

@@ -10,6 +10,7 @@ data class ProductItem(
     val imageUrl: String = "",
     val produkId: String? = null,
     val pedagangId: String? = null,
+    val pembeliId: String? = null,
     val produkStok: String? = null,
     val produkNama: String? = null,
     val produkKategori: String? = null,
