@@ -8,7 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp">
+        android:layout_height="160dp">
 
         <View
             android:id="@+id/topLine"
@@ -29,7 +29,8 @@
             android:src="@color/purple_500"
             app:layout_constraintBottom_toTopOf="@+id/topLine"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.216" />
 
         <TextView
             android:id="@+id/namaBarangTransaksi"
@@ -83,6 +84,23 @@
             android:text="pembeli ID"
             app:layout_constraintStart_toEndOf="@+id/imageCartProduct"
             app:layout_constraintTop_toBottomOf="@+id/pedagangId" />
+
+        <TextView
+            android:id="@+id/latlng"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Lat Lng / Lokasi produk sekarang si pembeli"
+            app:layout_constraintStart_toEndOf="@+id/imageCartProduct"
+            app:layout_constraintTop_toBottomOf="@+id/pembeliId" />
+
+        <TextView
+            android:id="@+id/produkId"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="Id Produk"
+            app:layout_constraintStart_toStartOf="@+id/jumlahBarangPerTransaksi"
+            app:layout_constraintTop_toBottomOf="@+id/latlng" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

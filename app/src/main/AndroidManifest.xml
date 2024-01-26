@@ -4,13 +4,12 @@
     <!-- internet & location -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- Kamera -->
-<!--    <uses-permission android:name="android.permission.CAMERA" />-->
-<!--    <uses-feature android:name="android.hardware.camera" />-->
-<!--    <uses-feature android:name="android.hardware.camera.autofocus" />-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Kamera -->
+    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
     <!-- <uses-feature android:name="android.hardware.camera" /> -->
-<!--     <uses-permission android:name="android.permission.CAMERA" />-->
+    <!-- <uses-feature android:name="android.hardware.camera.autofocus" /> -->
+    <!-- <uses-feature android:name="android.hardware.camera" /> -->
+    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
@@ -25,6 +24,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MarketplacePesaing"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.transaksi.KonfirmasiTransaksi"
+            android:exported="false" />
+        <activity
+            android:name=".ui.beranda.Home"
+            android:exported="false" />
         <activity
             android:name=".ui.transaksi.Alamat"
             android:exported="false" />
@@ -103,20 +108,21 @@
         </activity>
         <activity
             android:name=".main.MainActivity"
-            android:exported="false" />
-
-        <!-- Trigger Google Play services to install the backported photo picker module. -->
-        <!--suppress AndroidDomInspection -->
-        <service android:name="com.google.android.gms.metadata.ModuleDependencies"
+            android:exported="false" /> <!-- Trigger Google Play services to install the backported photo picker module. -->
+        <!-- suppress AndroidDomInspection -->
+        <service
+            android:name="com.google.android.gms.metadata.ModuleDependencies"
             android:enabled="false"
             android:exported="false"
             tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
             </intent-filter>
-            <meta-data android:name="photopicker_activity:0:required" android:value="" />
-        </service>
-        <!-- Provider -->
+
+            <meta-data
+                android:name="photopicker_activity:0:required"
+                android:value="" />
+        </service> <!-- Provider -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

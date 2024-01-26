@@ -1,7 +1,10 @@
 package com.bornewtech.marketplacepesaing.data.firestoreDb
 
+import android.os.Parcelable
 import android.util.Log
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class CartItem(
     val productId: String?,
     val productName: String,
@@ -9,7 +12,7 @@ data class CartItem(
     var productQuantity: Int,
     var pedagangId: String?,
     var pembeliId: String?
-) {
+) : Parcelable {
 
     // Tambahkan ini di dalam kelas CartItem
     // Updated toMap function
@@ -59,7 +62,7 @@ data class CartItem(
                 CartItem(null, "", 0.0, 0, null, null)
             }
         }
-    }
 
+    }
 
 }

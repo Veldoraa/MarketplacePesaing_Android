@@ -20,7 +20,7 @@ class SplashScreen : AppCompatActivity() {
         supportActionBar?.hide()
 
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this@SplashScreen, Login::class.java)
+            val intent = Intent(this@SplashScreen, PraLogin::class.java)
             startActivity(intent)
             finish()
             overridePendingTransition(androidx.constraintlayout.widget.R.anim.abc_fade_in, androidx.constraintlayout.widget.R.anim.abc_fade_out)

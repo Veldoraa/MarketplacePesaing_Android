@@ -39,6 +39,7 @@ class EditProfil : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditProfilBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 

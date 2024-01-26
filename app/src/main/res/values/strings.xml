@@ -99,4 +99,5 @@
     <string name="lokasiPedagang">Lokasi Terkini</string>
     <string name="masukKeranjang">Masukkan Ke Keranjang</string>
     <string name="jumlahbarang">Jumlah Barang</string>
+    <string name="alamat_string">Alamat Lengkap</string>
 </resources>

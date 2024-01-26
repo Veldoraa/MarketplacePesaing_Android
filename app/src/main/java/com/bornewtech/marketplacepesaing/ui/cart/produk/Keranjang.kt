@@ -10,6 +10,7 @@ import com.bornewtech.marketplacepesaing.R
 import com.bornewtech.marketplacepesaing.data.adapter.AdapterKeranjang
 import com.bornewtech.marketplacepesaing.data.firestoreDb.CartItem
 import com.bornewtech.marketplacepesaing.databinding.ActivityKeranjangBinding
+import com.bornewtech.marketplacepesaing.ui.barang.recyclerview.RecViewBarang
 import com.bornewtech.marketplacepesaing.ui.transaksi.Transaksi
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -28,14 +29,21 @@ class Keranjang : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityKeranjangBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         // Initialize Firebase Firestore
         firestoreKeranjang = FirebaseFirestore.getInstance()
 
         authUser = FirebaseAuth.getInstance()
 
+//        binding.imageCloseCart.setOnClickListener {
+//            startActivity(Intent(this, RecViewBarang::class.java))
+//        }
+
         binding.buttonPembayaran.setOnClickListener {
-            startActivity(Intent(this, Transaksi::class.java))
+            val intent = Intent(this, Transaksi::class.java)
+            intent.putParcelableArrayListExtra("cartItems", ArrayList(cartItems))
+            startActivity(intent)
         }
 
         // Initialize cartItems as MutableList

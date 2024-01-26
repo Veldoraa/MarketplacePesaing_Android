@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_gravity="center"
-            tools:src="@drawable/placeholder_circle" />
+            tools:src="@drawable/ayam" />
 
         <TextView
             android:id="@+id/tv_icon_category"

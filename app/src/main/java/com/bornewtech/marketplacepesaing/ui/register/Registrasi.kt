@@ -7,6 +7,7 @@ import android.text.TextUtils
 import android.widget.Toast
 import com.bornewtech.marketplacepesaing.databinding.ActivityRegistrasiBinding
 import com.bornewtech.marketplacepesaing.main.MainActivity
+import com.bornewtech.marketplacepesaing.ui.login.Login
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -58,7 +59,7 @@ class Registrasi : AppCompatActivity() {
                                 .set(pedagangData)
                                 .addOnSuccessListener {
                                     Toast.makeText(this, "User Id telah Terbuat", Toast.LENGTH_SHORT).show()
-                                    startActivity(Intent(this, MainActivity::class.java))
+                                    startActivity(Intent(this, Login::class.java))
                                 }
                                 .addOnFailureListener { e ->
                                     Toast.makeText(this, "Gagal: ${e.message}", Toast.LENGTH_SHORT).show()

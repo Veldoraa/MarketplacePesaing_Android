@@ -27,6 +27,7 @@ class RecViewBarang : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRecViewBarangBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         recyclerView = findViewById(R.id.recViewBarang)
         recyclerView.setHasFixedSize(true)

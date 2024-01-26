@@ -6,39 +6,33 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bornewtech.marketplacepesaing.R
+import com.bornewtech.marketplacepesaing.data.firestoreDb.CartItem
 import com.bornewtech.marketplacepesaing.data.firestoreDb.Transaction
-import com.bornewtech.marketplacepesaing.ui.transaksi.Transaksi
+import com.bornewtech.marketplacepesaing.databinding.ListTransaksiBinding
 
-class AdapterTransaksi(private val transaksiList: List<Transaction>) :
-    RecyclerView.Adapter<AdapterTransaksi.TransaksiViewHolder>() {
+class AdapterTransaksi(private val cartItems: List<CartItem>) :
+    RecyclerView.Adapter<AdapterTransaksi.ViewHolder>() {
 
-    class TransaksiViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val namaBarangTransaksi: TextView = itemView.findViewById(R.id.namaBarangTransaksi)
-        val statusTransaksi: TextView = itemView.findViewById(R.id.statusTransaksi)
-        val jumlahBarangPerTransaksi: TextView = itemView.findViewById(R.id.jumlahBarangPerTransaksi)
-        val pedagangId: TextView = itemView.findViewById(R.id.pedagangId)
-        val pembeliId: TextView = itemView.findViewById(R.id.pembeliId)
+    class ViewHolder(private val binding: ListTransaksiBinding) : RecyclerView.ViewHolder(binding.root) {
+        // Deklarasikan view di sini (jika perlu)
+        fun bind(cartItem: CartItem) {
+            binding.namaBarangTransaksi.text = cartItem.productName
+            binding.statusTransaksi.text = "Rp ${cartItem.productPrice},00"
+            binding.jumlahBarangPerTransaksi.text = "Qty: ${cartItem.productQuantity}"
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransaksiViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_transaksi, parent, false)
-        return TransaksiViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ListTransaksiBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: TransaksiViewHolder, position: Int) {
-        val transaksi = transaksiList[position]
-
-        // Set nilai view dengan data transaksi
-        holder.namaBarangTransaksi.text = transaksi.namaBarang ?: "Nama Barang Tidak Tersedia"
-        holder.statusTransaksi.text = transaksi.status ?: "Status Tidak Tersedia"
-        holder.jumlahBarangPerTransaksi.text = transaksi.jumlahBarang?.toString() ?: "0"
-        holder.pedagangId.text = transaksi.pedagangId ?: "Pedagang ID Tidak Tersedia"
-        holder.pembeliId.text = transaksi.pembeliId ?: "Pembeli ID Tidak Tersedia"
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val currentItem = cartItems[position]
+        holder.bind(currentItem)
     }
 
     override fun getItemCount(): Int {
-        return transaksiList.size
+        return cartItems.size
     }
 }
-
