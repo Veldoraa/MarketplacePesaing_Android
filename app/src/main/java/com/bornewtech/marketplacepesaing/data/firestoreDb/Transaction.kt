@@ -10,7 +10,9 @@ data class Transaction(
     val status: String? = null,
 //    val jumlahBarang: Int = 0,
 //    val produkId: String? = null,
-    val lokasiLatLng: Pair<Double, Double>? = null,
+//    val lokasiLatLng: Pair<Double, Double>? = null,
+    val latitude: Double = 0.0,      // Tambahkan field latitude
+    val longitude: Double = 0.0,
     val jumlahHarga: Double = 0.0,
     val cartItems: List<CartItem>? = null,
     val timestamp: Long = 0 // Tambahkan properti timestamp

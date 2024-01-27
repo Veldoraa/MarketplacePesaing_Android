@@ -13,6 +13,7 @@ import com.bornewtech.marketplacepesaing.data.firestoreDb.Transaction
 import com.bornewtech.marketplacepesaing.databinding.ActivityTransaksiBinding
 import com.bornewtech.marketplacepesaing.main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.UUID
 
@@ -60,34 +61,77 @@ class Transaksi : AppCompatActivity() {
         // Contoh: Kirim notifikasi, kurangi stok produk, dll.
         // ...
 
-        // Setelah proses transaksi selesai, Anda dapat menyimpan data transaksi ke Firestore.
-        saveTransactionToFirestore(cartItems)
+        // Dapatkan data lokasi dari Firebase Realtime Database
+        getLocationFromFirebase { latitude, longitude ->
+            // Setelah proses transaksi selesai, Anda dapat menyimpan data transaksi ke Firestore.
+            saveTransactionToFirestore(cartItems, latitude, longitude)
 
-        // Anda juga dapat menambahkan logika untuk menampilkan pesan konfirmasi atau mengarahkan pengguna ke halaman lain.
-        // Contoh: Menampilkan pesan konfirmasi
-        Toast.makeText(this, "Transaksi berhasil! Terima kasih!", Toast.LENGTH_SHORT).show()
-
-        // Kembali ke halaman utama atau halaman lain yang sesuai
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
+//            // Anda juga dapat menambahkan logika untuk menampilkan pesan konfirmasi atau mengarahkan pengguna ke halaman lain.
+//            // Contoh: Menampilkan pesan konfirmasi
+//            Toast.makeText(this, "Transaksi berhasil! Terima kasih!", Toast.LENGTH_SHORT).show()
+//
+//            // Kembali ke halaman utama atau halaman lain yang sesuai
+//            startActivity(Intent(this, Transaksi::class.java))
+//            finish()
+        }
     }
 
+    private fun getLocationFromFirebase(callback: (latitude: Double, longitude: Double) -> Unit) {
+        // Get the user ID
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+        if (userId != null) {
+            // Get a reference to the database
+            val databaseReference = FirebaseDatabase.getInstance().reference
+
+            // Get location data from Firebase Realtime Database
+            databaseReference.child("userLocations").child(userId)
+                .get()
+                .addOnSuccessListener { dataSnapshot ->
+                    // Check if data is obtained successfully
+                    if (dataSnapshot.exists()) {
+                        // Get latitude and longitude values from the data
+                        val latitude = dataSnapshot.child("latitude").value as Double
+                        val longitude = dataSnapshot.child("longitude").value as Double
+
+                        // Call the callback with location data
+                        callback.invoke(latitude, longitude)
+                    }
+                }
+                .addOnFailureListener {
+                    // Failed to get location data
+                    // You might want to handle this case or provide a default location
+                    callback.invoke(0.0, 0.0)
+                }
+        } else {
+            // User ID is null, handle accordingly
+            // You might want to handle this case or provide a default location
+            callback.invoke(0.0, 0.0)
+        }
+    }
+
+
+
     // Metode untuk menyimpan data transaksi ke Firestore
-    private fun saveTransactionToFirestore(cartItems: List<CartItem>) {
+    private fun saveTransactionToFirestore(cartItems: List<CartItem>, latitude: Double, longitude: Double) {
         val currentUser = authUser.currentUser
         val pembeliId = currentUser?.uid
 
         if (pembeliId != null) {
-            // Membuat objek Transaction
+            // Membuat objek Transaction dengan lokasiLatLng
+            val totalHarga = calculateTotalPrice(cartItems)
+
             val transaction = Transaction(
                 idTransaksi = UUID.randomUUID().toString(),
-//                pembeliId = pembeliId,
                 cartItems = cartItems,
+                jumlahHarga = totalHarga.toDouble(),
+                latitude = latitude,    // Menggunakan field latitude
+                longitude = longitude,  // Menggunakan field longitude
                 timestamp = System.currentTimeMillis()
             )
 
-            // Menyimpan objek Transaction ke Firestore
-            transaction.idTransaksi?.let {
+            // Menyimpan objek Transaction ke Firestore dengan UID sebagai ID dokumen
+            pembeliId.let {
                 firestore.collection("Transaksi").document(it)
                     .set(transaction)
                     .addOnSuccessListener {
@@ -101,4 +145,6 @@ class Transaksi : AppCompatActivity() {
             }
         }
     }
+
+
 }
