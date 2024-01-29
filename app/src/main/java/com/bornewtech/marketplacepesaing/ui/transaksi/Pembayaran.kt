@@ -19,7 +19,6 @@ class Pembayaran : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPembayaranBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.hide()
 
         authUser = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
