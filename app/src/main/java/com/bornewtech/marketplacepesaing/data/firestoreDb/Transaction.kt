@@ -13,7 +13,7 @@ data class Transaction(
 //    val lokasiLatLng: Pair<Double, Double>? = null,
     val latitude: Double = 0.0,      // Tambahkan field latitude
     val longitude: Double = 0.0,
-    val jumlahHarga: Double = 0.0,
+    val jumlahHarga: Int = 0,
     val cartItems: List<CartItem>? = null,
     val timestamp: Long = 0 // Tambahkan properti timestamp
 )  : Serializable

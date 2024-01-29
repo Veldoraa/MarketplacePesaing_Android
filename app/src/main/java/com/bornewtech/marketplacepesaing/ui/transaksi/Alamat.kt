@@ -60,7 +60,9 @@ class Alamat : AppCompatActivity() {
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot != null && documentSnapshot.exists()) {
                     val alamat = documentSnapshot.getString("alamatLengkap")
+                    val tempat = documentSnapshot.getString("tempatPengiriman")
                     binding.jalanRumah.setText(alamat)
+                    binding.tempat.setText(tempat)
                 }
             }
             .addOnFailureListener {

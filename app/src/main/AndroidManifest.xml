@@ -25,6 +25,9 @@
         android:theme="@style/Theme.MarketplacePesaing"
         tools:targetApi="31">
         <activity
+            android:name=".ui.transaksi.Pembayaran"
+            android:exported="false" />
+        <activity
             android:name=".ui.transaksi.KonfirmasiTransaksi"
             android:exported="false" />
         <activity

@@ -15,10 +15,13 @@ class AdapterTransaksi(private val cartItems: List<CartItem>) :
 
     class ViewHolder(private val binding: ListTransaksiBinding) : RecyclerView.ViewHolder(binding.root) {
         // Deklarasikan view di sini (jika perlu)
-        fun bind(cartItem: CartItem) {
+        fun bind(cartItem: CartItem, ) {
             binding.namaBarangTransaksi.text = cartItem.productName
             binding.statusTransaksi.text = "Rp ${cartItem.productPrice},00"
             binding.jumlahBarangPerTransaksi.text = "Qty: ${cartItem.productQuantity}"
+//            binding.pedagangId.text = "Pedagang ID: ${cartItem.pedagangId}"
+//            binding.pembeliId.text = "Pembeli ID: ${cartItem.pembeliId}"
+//            binding.produkId.text = "Produk ID: ${cartItem.productId}"
         }
     }
 

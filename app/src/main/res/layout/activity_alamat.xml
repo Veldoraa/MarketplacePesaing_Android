@@ -87,6 +87,23 @@
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/jalanRumah" />
 
+    <EditText
+        android:id="@+id/tempat"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/white_background"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="start|center_vertical"
+        android:hint="Tempat: Rumah/Kantor"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:singleLine="true"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/edCurrentLoc" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
@@ -96,17 +113,17 @@
         app:layout_constraintEnd_toEndOf="@id/rightGuideline"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@id/edCurrentLoc">
+        app:layout_constraintTop_toBottomOf="@id/tempat">
 
         <Button
-            android:id="@+id/btnhapusAlamat"
+            android:id="@+id/btnsimpanAlamat"
             style="@style/OutlinedRoundedBox"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="20dp"
             android:layout_weight="1"
-            android:text="Hapus"
+            android:text="Simpan"
             app:layout_constraintEnd_toStartOf="@+id/rightGuideLine"
             app:layout_constraintStart_toStartOf="@+id/leftGuideLine"
             app:layout_constraintTop_toBottomOf="@+id/totalBoxContainer" />
@@ -125,16 +142,6 @@
             app:layout_constraintTop_toBottomOf="@+id/totalBoxContainer" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnsimpanAlamat"
-        style="@style/OutlinedRoundedBox"
-        android:layout_width="160dp"
-        android:layout_height="60dp"
-        android:layout_weight="1"
-        android:text="Simpan"
-        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftGuideline"

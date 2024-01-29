@@ -8,6 +8,7 @@ import com.bornewtech.marketplacepesaing.databinding.ActivityMainBinding
 import com.bornewtech.marketplacepesaing.maps.Maps
 import com.bornewtech.marketplacepesaing.ui.transaksi.Transaksi
 import com.bornewtech.marketplacepesaing.ui.barang.recyclerview.RecViewBarang
+import com.bornewtech.marketplacepesaing.ui.cart.produk.Keranjang
 import com.bornewtech.marketplacepesaing.ui.fragment.home.HomeFragment
 import com.bornewtech.marketplacepesaing.ui.profile.Profil
 import com.bornewtech.marketplacepesaing.ui.recyclerview.RecViewPedagang
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.orderan -> {
-                    val intent = Intent(this, Transaksi::class.java)
+                    val intent = Intent(this, Keranjang::class.java)
                     startActivity(intent)
                 }
 
