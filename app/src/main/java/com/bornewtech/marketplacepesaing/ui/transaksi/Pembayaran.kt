@@ -19,6 +19,7 @@ class Pembayaran : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPembayaranBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         authUser = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
@@ -32,7 +33,7 @@ class Pembayaran : AppCompatActivity() {
         // Set up onClickListener for the "Bayar" button
         binding.buttonSelesai.setOnClickListener {
             // Perform payment logic here, then save payment status to Firebase Realtime Database
-            savePaymentStatusToDatabase(userId, true)
+            savePaymentStatusToDatabase(userId, "sudahBayar")
         }
     }
 
@@ -58,8 +59,8 @@ class Pembayaran : AppCompatActivity() {
                                     // Retrieve transaction data
                                     val idTransaksi = documentSnapshotTransaksi.getString("idTransaksi")
 
-                                    // Trim the ID to 12 characters from the end
-                                    val trimmedIdTransaksi = idTransaksi?.takeLast(12)
+                                    // Trim the ID to 12 characters from the end and make it UPPERCASE
+                                    val trimmedIdTransaksi = idTransaksi?.takeLast(12)?.toUpperCase()
                                     binding.tvIdTransaksi.text = "Transaksi: #$trimmedIdTransaksi"
 
                                     // Set totalHarga to TextView
@@ -95,11 +96,11 @@ class Pembayaran : AppCompatActivity() {
         databaseReference.child("totalHarga").setValue(totalHarga)
     }
 
-    private fun savePaymentStatusToDatabase(userId: String?, isPaid: Boolean) {
+    private fun savePaymentStatusToDatabase(userId: String?, status: String) {
         if (userId != null) {
             // Save payment status to Firebase Realtime Database
             val databaseReference = FirebaseDatabase.getInstance().getReference("Transaksi/$userId")
-            databaseReference.child("status").setValue(isPaid)
+            databaseReference.child("status").setValue(status)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Data pembayaran berhasil disimpan", Toast.LENGTH_SHORT).show()
                 }
