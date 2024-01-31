@@ -19,9 +19,6 @@ class AdapterTransaksi(private val cartItems: List<CartItem>) :
             binding.namaBarangTransaksi.text = cartItem.productName
             binding.statusTransaksi.text = "Rp ${cartItem.productPrice},00"
             binding.jumlahBarangPerTransaksi.text = "Qty: ${cartItem.productQuantity}"
-//            binding.pedagangId.text = "Pedagang ID: ${cartItem.pedagangId}"
-//            binding.pembeliId.text = "Pembeli ID: ${cartItem.pembeliId}"
-//            binding.produkId.text = "Produk ID: ${cartItem.productId}"
         }
     }
 

@@ -32,7 +32,7 @@ import java.util.Locale
 
 class Alamat : AppCompatActivity() {
     private lateinit var binding: ActivityAlamatBinding
-    private var dbProfil  = Firebase.firestore
+    private var dbProfil = Firebase.firestore
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
 
@@ -47,13 +47,18 @@ class Alamat : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = LocationRequest.create()
 
+        binding.btnsimpanAlamat.setOnClickListener {
+            // Panggil fungsi untuk menyimpan lokasi ke Firebase Realtime Database
+            requestLocationUpdates()
+        }
+
         binding.btnupdateCurrentLoc.setOnClickListener {
             requestLocationPermission()
         }
-
     }
+
     // Nerima data dari firestore
-    private fun setData(){
+    private fun setData() {
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
         val refProfil = dbProfil.collection("Pembeli").document(userId)
         refProfil.get()
@@ -70,16 +75,17 @@ class Alamat : AppCompatActivity() {
             }
     }
 
-    // Menampilkan lokasi saat tombol ditekan
     private fun requestLocationPermission() {
-        if (ActivityCompat.checkSelfPermission
-                (this, Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED)
-        {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             checkGps()
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                EditProfil.LOCATION_PERMISSION_REQUEST_CODE
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
             )
         }
     }
@@ -106,16 +112,17 @@ class Alamat : AppCompatActivity() {
                     ApiException::class.java
                 )
                 getUserLocation()
-            } catch (e : ApiException){
+            } catch (e: ApiException) {
                 e.printStackTrace()
-                when (e.statusCode){
+                when (e.statusCode) {
                     LocationSettingsStatusCodes.RESOLUTION_REQUIRED ->
                         try {
                             val resolveApiException = e as ResolvableApiException
-                            resolveApiException.startResolutionForResult(this,
-                                EditProfil.LOCATION_PERMISSION_REQUEST_CODE
+                            resolveApiException.startResolutionForResult(
+                                this,
+                                LOCATION_PERMISSION_REQUEST_CODE
                             )
-                        } catch (sendIntentException: IntentSender.SendIntentException){
+                        } catch (sendIntentException: IntentSender.SendIntentException) {
 
                         }
                     LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
@@ -135,26 +142,20 @@ class Alamat : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return
         }
         fusedLocationClient.lastLocation.addOnCompleteListener { task ->
             val location = task.getResult()
-            if (location != null ){
+            if (location != null) {
                 try {
                     val geocoder = Geocoder(this, Locale.getDefault())
-                    val address = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                    val address =
+                        geocoder.getFromLocation(location.latitude, location.longitude, 1)
                     val addressLine = address?.get(0)?.getAddressLine(0)
                     binding.edCurrentLoc.setText(addressLine)
                     val addressLocation = address?.get(0)?.getAddressLine(0)
                     openLocation(addressLocation.toString())
-                } catch (e : IOException) {
+                } catch (e: IOException) {
 
                 }
             }
@@ -173,92 +174,49 @@ class Alamat : AppCompatActivity() {
     }
 
     private fun requestLocationUpdates() {
-        // Check location permission
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            // If permission is granted, get the current location
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
-                    // Check if location is obtained successfully
                     if (location != null) {
-                        // Use the current location
                         val latitude = location.latitude
                         val longitude = location.longitude
 
-                        // Save location to Firebase Realtime Database
+                        // Simpan lokasi ke Firebase Realtime Database
                         saveLocationToFirebase(latitude, longitude)
                     }
                 }
         } else {
-            // If not, request location permission
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                EditProfil.LOCATION_PERMISSION_REQUEST_CODE
+                LOCATION_PERMISSION_REQUEST_CODE
             )
         }
     }
 
     private fun saveLocationToFirebase(latitude: Double, longitude: Double) {
-        // Get the user ID
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
         if (userId != null) {
-            // Get a reference to the database
             val databaseReference = FirebaseDatabase.getInstance().reference
-
-            // Create a location object to be saved in the database
             val locationData = hashMapOf(
                 "latitude" to latitude,
                 "longitude" to longitude
             )
 
-            // Save the location to Firebase Realtime Database
             databaseReference.child("userLocations").child(userId).setValue(locationData)
                 .addOnSuccessListener {
-                    // Successful storage
-                    // Add appropriate actions or feedback if needed
-                    // Retrieve and display location data in a TextView if needed
-                    retrieveAndDisplayLocation()
+                    Toast.makeText(this, "Lokasi berhasil disimpan", Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener {
-                    // Failed storage
-                    // Add appropriate actions or feedback if needed
+                    Toast.makeText(this, "Gagal menyimpan lokasi", Toast.LENGTH_SHORT).show()
                 }
         }
     }
-
-    private fun retrieveAndDisplayLocation() {
-        // Get the user ID
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-
-        if (userId != null) {
-            // Get a reference to the database
-            val databaseReference = FirebaseDatabase.getInstance().reference
-
-            // Get location data from Firebase Realtime Database
-            databaseReference.child("userLocations").child(userId)
-                .get()
-                .addOnSuccessListener { dataSnapshot ->
-                    // Check if data is obtained successfully
-                    if (dataSnapshot.exists()) {
-                        // Get latitude and longitude values from the data
-                        val latitude = dataSnapshot.child("latitude").value as Double
-                        val longitude = dataSnapshot.child("longitude").value as Double
-
-                        // Display data in a TextView (e.g., inpCurrentLocProfil)
-                        binding.edCurrentLoc.setText("Latitude: $latitude, Longitude: $longitude")
-                    }
-                }
-                .addOnFailureListener {
-                    // Failed to get location data
-                }
-        }
-    }
-
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
