@@ -11,7 +11,8 @@ data class CartItem(
     val productPrice: Double,
     var productQuantity: Int,
     var pedagangId: String?,
-    var pembeliId: String?
+    var pembeliId: String?,
+    val imageUrl: String? // Tambahkan properti imageUrl untuk menyimpan URL gambar produk
 ) : Parcelable {
 
     // Tambahkan ini di dalam kelas CartItem
@@ -23,7 +24,8 @@ data class CartItem(
             "productQuantity" to productQuantity,
             "productPrice" to productPrice,
             "pedagangId" to pedagangId,
-            "pembeliId" to pembeliId
+            "pembeliId" to pembeliId,
+            "imageUrl" to imageUrl // Sertakan imageUrl dalam map
         )
     }
 
@@ -40,7 +42,7 @@ data class CartItem(
     }
 
     override fun toString(): String {
-        return "$productId,$productName,$productPrice,$productQuantity,$pedagangId,$pembeliId"
+        return "$productId,$productName,$productPrice,$productQuantity,$pedagangId,$pembeliId,$imageUrl"
     }
 
     companion object {
@@ -54,15 +56,14 @@ data class CartItem(
                     splitData[2].toDoubleOrNull() ?: 0.0, // Index 2, handle potential null
                     splitData[3].toIntOrNull() ?: 0,    // Index 3, handle potential null
                     splitData.getOrNull(4),             // Index 4, handle potential null
-                    splitData.getOrNull(5)
+                    splitData.getOrNull(5),
+                    splitData.getOrNull(6)             // Index 5, handle potential null
                 )
             } catch (e: Exception) {
                 // Handle the case where conversion fails, log the error, and return a default CartItem.
                 Log.e("CartItem", "Error parsing CartItem from string: $data", e)
-                CartItem(null, "", 0.0, 0, null, null)
+                CartItem(null, "", 0.0, 0, null, null, null)
             }
         }
-
     }
-
 }

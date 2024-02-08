@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bornewtech.marketplacepesaing.R
 import com.bornewtech.marketplacepesaing.data.firestoreDb.CartItem
+import com.bumptech.glide.Glide
 
 class AdapterKeranjang(
     private val cartItems: MutableList<CartItem>,
@@ -21,6 +22,7 @@ class AdapterKeranjang(
         val productName: TextView = itemView.findViewById(R.id.namaBarangCart)
         val quantity: TextView = itemView.findViewById(R.id.kuantitasBarangCart)
         val price: TextView = itemView.findViewById(R.id.hargaBarangCart)
+        val productImage: ImageView = itemView.findViewById(R.id.imageCartProduct) // Tambahkan ImageView untuk menampilkan gambar produk
         val plusButton: ImageView = itemView.findViewById(R.id.imagePlus)
         val minusButton: ImageView = itemView.findViewById(R.id.imageMinus)
     }
@@ -38,6 +40,14 @@ class AdapterKeranjang(
         holder.productName.text = currentItem.productName
         holder.quantity.text = "Jumlah: ${currentItem.productQuantity}" // Menggunakan properti productQuantity
         holder.price.text = "Harga per Barang: Rp ${currentItem.productPrice}"
+
+        // Load image using Glide
+        currentItem.imageUrl?.let { imageUrl ->
+            Glide.with(holder.itemView.context)
+                .load(imageUrl)
+                .placeholder(R.drawable.image_baseline) // Placeholder image jika gambar belum selesai dimuat
+                .into(holder.productImage)
+        }
 
         // Handle item click
         holder.itemView.setOnClickListener {

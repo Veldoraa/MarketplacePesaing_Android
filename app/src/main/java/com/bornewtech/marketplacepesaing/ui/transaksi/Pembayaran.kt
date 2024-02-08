@@ -95,7 +95,7 @@ class Pembayaran : AppCompatActivity() {
 
     private fun saveDataToDatabase(userId: String, namaPembeli: String?, trimmedIdTransaksi: String?, totalHarga: Int) {
         // Save data to Firebase Realtime Database
-        val databaseReference = firebaseDatabase.reference.child("Transaksi").child(userId)
+        val databaseReference = firebaseDatabase.reference.child("riwayatTransaksi").child(userId)
         databaseReference.child("namaPembeli").setValue(namaPembeli)
         databaseReference.child("idTransaksi").setValue(trimmedIdTransaksi)
         databaseReference.child("totalHarga").setValue(totalHarga)
@@ -104,7 +104,7 @@ class Pembayaran : AppCompatActivity() {
     private fun savePaymentStatusAndLocationToDatabase(userId: String?, status: String) {
         if (userId != null) {
             // Save payment status to Firebase Realtime Database
-            val databaseReference = firebaseDatabase.reference.child("Transaksi").child(userId)
+            val databaseReference = firebaseDatabase.reference.child("riwayatTransaksi").child(userId)
             databaseReference.child("status").setValue(status)
 
             // Fetch latitude and longitude from userLocations
@@ -139,7 +139,7 @@ class Pembayaran : AppCompatActivity() {
     private fun saveLocationToDatabase(userId: String, latitude: Double?, longitude: Double?) {
         if (latitude != null && longitude != null) {
             // Save latitude and longitude to Firebase Realtime Database
-            val databaseReference = firebaseDatabase.reference.child("Transaksi").child(userId)
+            val databaseReference = firebaseDatabase.reference.child("riwayatTransaksi").child(userId)
             databaseReference.child("latitude").setValue(latitude)
             databaseReference.child("longitude").setValue(longitude)
 

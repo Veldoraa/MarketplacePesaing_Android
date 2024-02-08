@@ -36,10 +36,6 @@ class Keranjang : AppCompatActivity() {
 
         authUser = FirebaseAuth.getInstance()
 
-//        binding.imageCloseCart.setOnClickListener {
-//            startActivity(Intent(this, RecViewBarang::class.java))
-//        }
-
         binding.buttonPembayaran.setOnClickListener {
             val intent = Intent(this, Transaksi::class.java)
             intent.putParcelableArrayListExtra("cartItems", ArrayList(cartItems))
@@ -196,8 +192,6 @@ class Keranjang : AppCompatActivity() {
             Log.e("Keranjang", "User is not signed in during decrement click")
         }
     }
-
-
 
     private fun removeItemFromFirestoreAndSharedPreferences(cartItem: CartItem) {
         // Remove the item from Firestore
