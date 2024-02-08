@@ -1,45 +1,51 @@
 package com.bornewtech.marketplacepesaing.ui.recyclerview
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bornewtech.marketplacepesaing.R
 import com.bornewtech.marketplacepesaing.data.adapter.AdapterPedagang
 import com.bornewtech.marketplacepesaing.data.firestoreDb.Pedagang
-import com.bornewtech.marketplacepesaing.data.firestoreDb.Products
 import com.bornewtech.marketplacepesaing.databinding.ActivityRecViewPedagangBinding
+import com.bornewtech.marketplacepesaing.main.MainActivity
 import com.bornewtech.marketplacepesaing.ui.barang.recyclerview.RecViewBarang
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.bumptech.glide.Glide
 
 class RecViewPedagang : AppCompatActivity() {
     private lateinit var binding: ActivityRecViewPedagangBinding
-    private var firestore =  FirebaseFirestore.getInstance()
-    private val produkList = mutableListOf<Products>() // List untuk menyimpan data produk
+    private val firestore = FirebaseFirestore.getInstance()
+    private val pedagangList = mutableListOf<Pedagang>()
+    private lateinit var adapter: AdapterPedagang
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRecViewPedagangBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
+        binding.toolbarlistPedagang.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+
         FirebaseApp.initializeApp(this)
 
         val recyclerView: RecyclerView = findViewById(R.id.recViewPedagang)
         val layoutManager = LinearLayoutManager(this)
-
         recyclerView.layoutManager = layoutManager
 
-        // Move adapter initialization here
-        val adapter = AdapterPedagang(emptyList()) { pedagang ->
+        adapter = AdapterPedagang(emptyList()) { pedagang ->
             // Handle item click here
             Log.d("RecViewPedagang", "Item clicked: $pedagang")
 
-            // Start DetailBarang activity with selected item
+            // Start RecViewBarang activity with selected item
             val intent = Intent(this, RecViewBarang::class.java)
             intent.putExtra("idSelected", pedagang.userId)
             startActivity(intent)
@@ -50,52 +56,18 @@ class RecViewPedagang : AppCompatActivity() {
         firestore.collection("Pedagang")
             .get()
             .addOnSuccessListener { result ->
-                val pedagangList = mutableListOf<Pedagang>()
-
                 for (document in result) {
                     val pedagang = document.toObject(Pedagang::class.java)
                     pedagangList.add(pedagang)
                 }
 
-                // Pass pedagangList to your RecyclerView adapter
                 adapter.updateData(pedagangList)
-
-                // Notify data set changed
                 adapter.notifyDataSetChanged()
 
-                // Log pedagangList for debugging
                 Log.d("RecViewPedagang", "Pedagang List: $pedagangList")
-
-                // Load produk data berdasarkan ID pedagang
-                loadProdukData(pedagangList)
             }
             .addOnFailureListener { exception ->
-                // Handle errors
                 Log.e("RecViewPedagang", "Error fetching data", exception)
-            }
-    }
-
-    private fun loadProdukData(pedagangList: List<Pedagang>) {
-        // Ambil ID pedagang dari pedagangList dan gunakan untuk query produk
-//        val pedagangIds = pedagangList.map { it.userId ?: "" }
-
-        firestore.collection("Products")
-//            .whereIn("userId", pedagangIds)
-            .get()
-            .addOnSuccessListener { querySnapshot: QuerySnapshot ->
-                // Loop through each document in the query results
-                for (document in querySnapshot.documents) {
-                    val produk = document.toObject(Products::class.java)
-                    produk?.let { produkList.add(it) }
-                }
-
-                // Handle the case when data loading is complete
-                // You may want to notify the adapter or perform other actions here
-                Log.d("RecViewPedagang", "Produk List: $produkList")
-            }
-            .addOnFailureListener { exception ->
-                // Handle errors
-                Log.e("RecViewPedagang", "Error fetching produk data", exception)
             }
     }
 }

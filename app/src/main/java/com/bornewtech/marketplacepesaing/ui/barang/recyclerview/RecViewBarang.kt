@@ -13,6 +13,7 @@ import com.bornewtech.marketplacepesaing.data.adapter.AdapterProduct
 import com.bornewtech.marketplacepesaing.data.firestoreDb.Products
 import com.bornewtech.marketplacepesaing.databinding.ActivityRecViewBarangBinding
 import com.bornewtech.marketplacepesaing.ui.barang.DetailBarang
+import com.bornewtech.marketplacepesaing.ui.recyclerview.RecViewPedagang
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -28,6 +29,10 @@ class RecViewBarang : AppCompatActivity() {
         binding = ActivityRecViewBarangBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+
+        binding.toolbarlistBarang.setOnClickListener {
+            startActivity(Intent(this, RecViewPedagang::class.java))
+        }
 
         recyclerView = findViewById(R.id.recViewBarang)
         recyclerView.setHasFixedSize(true)
