@@ -115,7 +115,7 @@ class Pembayaran : AppCompatActivity() {
     }
 
     private fun fetchUserLocationAndSaveToDatabase(userId: String) {
-        firebaseDatabase.reference.child("userLocations").child(userId)
+        firebaseDatabase.reference.child("userLocations").child("pembeli").child(userId)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {

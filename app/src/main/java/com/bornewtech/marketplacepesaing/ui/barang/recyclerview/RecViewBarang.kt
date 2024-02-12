@@ -58,9 +58,9 @@ class RecViewBarang : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun eventChangeListener() {
-        val selectedId = intent.getStringExtra("idSelected")
-        if (selectedId != null) {
-            dbBarang.collection("Products").document(selectedId)
+        val userId = intent.getStringExtra("userId")
+        if (userId != null) {
+            dbBarang.collection("Products").document(userId)
                 .addSnapshotListener { documentSnapshot, e ->
                     if (e != null) {
                         Log.w(TAG, "Listen failed.", e)
@@ -87,7 +87,41 @@ class RecViewBarang : AppCompatActivity() {
                     }
                 }
         } else {
-            Log.d(TAG, "User not authenticated")
+            Log.d(TAG, "UserId is null")
         }
     }
+
+//    private fun eventChangeListener() {
+//        val selectedId = intent.getStringExtra("idSelected")
+//        if (selectedId != null) {
+//            dbBarang.collection("Products").document(selectedId)
+//                .addSnapshotListener { documentSnapshot, e ->
+//                    if (e != null) {
+//                        Log.w(TAG, "Listen failed.", e)
+//                        return@addSnapshotListener
+//                    }
+//
+//                    if (documentSnapshot != null && documentSnapshot.exists()) {
+//                        val productList = documentSnapshot.toObject(Products::class.java)
+//                        if (productList != null) {
+//                            val productListData = productList.productList
+//                            productListData?.let {
+//                                // Convert Firestore data to include image URL
+//                                val productListWithImageUrl = it.map { productItem ->
+//                                    productItem.copy(imageUrl = productItem.imageUrl)
+//                                }
+//                                adapterProduk.updateData(productListWithImageUrl)
+//                                adapterProduk.notifyDataSetChanged()
+//                            }
+//                        } else {
+//                            Log.d(TAG, "Failed to convert document to Products")
+//                        }
+//                    } else {
+//                        Log.d(TAG, "Document does not exist")
+//                    }
+//                }
+//        } else {
+//            Log.d(TAG, "User not authenticated")
+//        }
+//    }
 }

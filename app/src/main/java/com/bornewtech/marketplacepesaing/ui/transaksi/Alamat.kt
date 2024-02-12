@@ -208,15 +208,33 @@ class Alamat : AppCompatActivity() {
                 "longitude" to longitude
             )
 
-            databaseReference.child("userLocations").child(userId).setValue(locationData)
+            // Buat struktur yang diinginkan dalam Firebase Realtime Database
+            databaseReference.child("userLocations")
+                .child("pembeli")
+                .child(userId)
+                .child("latitude")
+                .setValue(latitude)
                 .addOnSuccessListener {
-                    Toast.makeText(this, "Lokasi berhasil disimpan", Toast.LENGTH_SHORT).show()
+                    // Simpan longitude setelah berhasil menyimpan latitude
+                    databaseReference.child("userLocations")
+                        .child("pembeli")
+                        .child(userId)
+                        .child("longitude")
+                        .setValue(longitude)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Lokasi berhasil disimpan", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(this, "Gagal menyimpan lokasi", Toast.LENGTH_SHORT).show()
+                        }
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "Gagal menyimpan lokasi", Toast.LENGTH_SHORT).show()
                 }
         }
     }
+
+
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001

@@ -107,8 +107,8 @@ class Transaksi : AppCompatActivity() {
             // Get a reference to the database
             val databaseReference = FirebaseDatabase.getInstance().reference
 
-            // Get location data from Firebase Realtime Database
-            databaseReference.child("userLocations").child(userId)
+            // Get location data from Firebase Realtime Database under 'userLocations/pembeli/userId'
+            databaseReference.child("userLocations").child("pembeli").child(userId)
                 .get()
                 .addOnSuccessListener { dataSnapshot ->
                     // Check if data is obtained successfully
@@ -119,6 +119,10 @@ class Transaksi : AppCompatActivity() {
 
                         // Call the callback with location data
                         callback.invoke(latitude, longitude)
+                    } else {
+                        // Handle the case where location data doesn't exist
+                        // You might want to handle this case or provide a default location
+                        callback.invoke(0.0, 0.0)
                     }
                 }
                 .addOnFailureListener {
