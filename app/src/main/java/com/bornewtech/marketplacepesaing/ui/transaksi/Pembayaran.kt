@@ -26,7 +26,7 @@ class Pembayaran : AppCompatActivity() {
         supportActionBar?.hide()
 
         authUser = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
+        firestore = FirebaseFirestore.getInstance() // Inisialisasi Firestore di sini
         firebaseDatabase = FirebaseDatabase.getInstance()
 
         // Retrieve data from intent
@@ -38,7 +38,10 @@ class Pembayaran : AppCompatActivity() {
         // Set up onClickListener for the "Bayar" button
         binding.buttonSelesai.setOnClickListener {
             // Perform payment logic here, then save payment status and location to Firebase Realtime Database
-            savePaymentStatusAndLocationToDatabase(userId, "sudahBayar")
+            savePaymentStatusAndLocationToDatabase(userId, "Sudah Bayar")
+
+            // Save data from Firebase Realtime Database to Firestore
+            saveDataFromRealtimeDatabaseToFirestore(userId)
         }
     }
 
@@ -147,6 +150,55 @@ class Pembayaran : AppCompatActivity() {
         } else {
             Log.d("Pembayaran", "Latitude or longitude is null.")
             Toast.makeText(this, "Gagal menyimpan data pembayaran", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun saveDataFromRealtimeDatabaseToFirestore(userId: String?) {
+        if (userId != null) {
+            val databaseReference = firebaseDatabase.reference.child("riwayatTransaksi").child(userId)
+            databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val namaPembeli = snapshot.child("namaPembeli").value as? String
+                        val idTransaksi = snapshot.child("idTransaksi").value as? String
+                        val totalHarga = (snapshot.child("totalHarga").value as? Long)?.toInt()
+                        val status = snapshot.child("status").value as? String
+                        val latitude = snapshot.child("latitude").value as? Double
+                        val longitude = snapshot.child("longitude").value as? Double
+
+                        // Save data to Firestore
+                        val riwayatTransaksi = hashMapOf(
+                            "namaPembeli" to namaPembeli,
+                            "idTransaksi" to idTransaksi,
+                            "totalHarga" to totalHarga,
+                            "status" to status,
+                            "latitude" to latitude,
+                            "longitude" to longitude
+                        )
+
+                        if (namaPembeli != null && idTransaksi != null && totalHarga != null && status != null && latitude != null && longitude != null) {
+                            firestore.collection("riwayatTransaksi").document(userId)
+                                .set(riwayatTransaksi)
+                                .addOnSuccessListener {
+                                    Log.d("Pembayaran", "Data berhasil disimpan di Firestore.")
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.e("Pembayaran", "Error saat menyimpan data di Firestore: $e")
+                                }
+                        } else {
+                            Log.d("Pembayaran", "Ada data yang null saat menyimpan ke Firestore.")
+                        }
+                    } else {
+                        Log.d("Pembayaran", "Data dari Realtime Database tidak ditemukan.")
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("Pembayaran", "Error fetching data from Realtime Database: $error")
+                }
+            })
+        } else {
+            Log.d("Pembayaran", "User ID is null.")
         }
     }
 }
