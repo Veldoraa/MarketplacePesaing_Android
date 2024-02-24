@@ -57,6 +57,7 @@ class Pembayaran : AppCompatActivity() {
                     if (documentSnapshot.exists()) {
                         // Retrieve user data
                         val namaPembeli = documentSnapshot.getString("namaLengkap")
+                        val userId = documentSnapshot.getString("userId")
                         binding.tvNamaPembeli.text = "$namaPembeli"
 
                         // Get transaction data from Firestore
@@ -67,15 +68,19 @@ class Pembayaran : AppCompatActivity() {
                                     // Retrieve transaction data
                                     val idTransaksi = documentSnapshotTransaksi.getString("idTransaksi")
 
+                                    // Tetapkan idTransaksi yang lengkap ke TextView
+                                    binding.tvIdTransaksi.text = "Transaksi: #$idTransaksi"
+
                                     // Trim the ID to 12 characters from the end and make it UPPERCASE
                                     val trimmedIdTransaksi = idTransaksi?.takeLast(12)?.toUpperCase()
-                                    binding.tvIdTransaksi.text = "Transaksi: #$trimmedIdTransaksi"
 
+                                    // Simpan idTransaksi yang lengkap ke Firebase Realtime Database dan Firestore
+                                    saveDataToDatabase(userId!!, namaPembeli, idTransaksi, totalHarga)
+
+                                    // Tampilkan versi yang dipotong di antarmuka pengguna
+                                    binding.tvIdTransaksi.text = "Transaksi: #$trimmedIdTransaksi"
                                     // Set totalHarga to TextView
                                     binding.tvTotalPrice.text = "Total Harga: Rp $totalHarga,00"
-
-                                    // Save data to Firebase Realtime Database
-                                    saveDataToDatabase(userId!!, namaPembeli, trimmedIdTransaksi, totalHarga)
                                 } else {
                                     Log.d("Pembayaran", "Transaction data not found.")
                                 }
@@ -96,12 +101,15 @@ class Pembayaran : AppCompatActivity() {
         }
     }
 
-    private fun saveDataToDatabase(userId: String, namaPembeli: String?, trimmedIdTransaksi: String?, totalHarga: Int) {
+    private fun saveDataToDatabase(userId: String, namaPembeli: String?, idTransaksi: String?, totalHarga: Int) {
         // Save data to Firebase Realtime Database
         val databaseReference = firebaseDatabase.reference.child("riwayatTransaksi").child(userId)
-        databaseReference.child("namaPembeli").setValue(namaPembeli)
-        databaseReference.child("idTransaksi").setValue(trimmedIdTransaksi)
-        databaseReference.child("totalHarga").setValue(totalHarga)
+        databaseReference.apply {
+            child("namaPembeli").setValue(namaPembeli)
+            child("idTransaksi").setValue(idTransaksi)
+            child("totalHarga").setValue(totalHarga)
+            child("pembeliId").setValue(userId)
+        }
     }
 
     private fun savePaymentStatusAndLocationToDatabase(userId: String?, status: String) {
@@ -143,8 +151,10 @@ class Pembayaran : AppCompatActivity() {
         if (latitude != null && longitude != null) {
             // Save latitude and longitude to Firebase Realtime Database
             val databaseReference = firebaseDatabase.reference.child("riwayatTransaksi").child(userId)
-            databaseReference.child("latitude").setValue(latitude)
-            databaseReference.child("longitude").setValue(longitude)
+            databaseReference.apply {
+                child("latitude").setValue(latitude)
+                child("longitude").setValue(longitude)
+            }
 
             Toast.makeText(this, "Data pembayaran berhasil disimpan", Toast.LENGTH_SHORT).show()
         } else {
@@ -161,6 +171,7 @@ class Pembayaran : AppCompatActivity() {
                     if (snapshot.exists()) {
                         val namaPembeli = snapshot.child("namaPembeli").value as? String
                         val idTransaksi = snapshot.child("idTransaksi").value as? String
+                        val pembeliId = snapshot.child("pembeliId").value as? String
                         val totalHarga = (snapshot.child("totalHarga").value as? Long)?.toInt()
                         val status = snapshot.child("status").value as? String
                         val latitude = snapshot.child("latitude").value as? Double
@@ -170,6 +181,7 @@ class Pembayaran : AppCompatActivity() {
                         val riwayatTransaksi = hashMapOf(
                             "namaPembeli" to namaPembeli,
                             "idTransaksi" to idTransaksi,
+                            "pembeliId" to pembeliId,
                             "totalHarga" to totalHarga,
                             "status" to status,
                             "latitude" to latitude,
