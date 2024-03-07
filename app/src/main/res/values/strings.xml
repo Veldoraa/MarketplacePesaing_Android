@@ -32,10 +32,10 @@
     <string name="text_lapak">Lapak Ku</string>
     <string name="tombol_back">Tombol Kembali</string>
     <string name="profil_saya">Profil Ku</string>
-    <string name="nama_pdg">Nama Pedagang</string>
-    <string name="no_pdg">No Hp/WA Pedagang</string>
+    <string name="nama_pdg">Nama Pengguna</string>
+    <string name="no_pdg">No Hp/WA Pengguna</string>
     <string name="tombol_edit">Tombol Edit</string>
-    <string name="txt_akun_pdg">Akun Pedagang</string>
+    <string name="txt_akun_pdg">Akun Pengguna</string>
     <string name="riwayat_pesanan_pdg">Riwayat Pesanan</string>
     <string name="saldo_pdg">Saldo Ku</string>
     <string name="ganti_pass_pdg">Ganti Kata Sandi</string>
@@ -84,7 +84,7 @@
     <string name="upd_Location">Perbarui Lokasi</string>
     <string name="kelilingYuk">Keliling Yukk</string>
     <string name="home">Beranda</string>
-    <string name="keranjang">Keranjang</string>
+    <string name="keranjang">Akan Datang</string>
     <string name="orderan">Pesanan</string>
     <string name="akun_pengguna">Profil</string>
     <string name="welcome">Selamat Datang</string>

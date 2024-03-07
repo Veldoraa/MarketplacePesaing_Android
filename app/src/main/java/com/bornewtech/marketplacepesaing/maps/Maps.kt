@@ -17,6 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -82,6 +83,11 @@ class Maps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickLis
                                 if (namaLengkap != null) {
                                     val pedagangLocation = LatLng(lat, lng)
                                     val marker = mMap.addMarker(MarkerOptions().position(pedagangLocation).title(namaLengkap))
+//                                    val marker = mMap.addMarker(MarkerOptions()
+//                                        .position(pedagangLocation)
+//                                        .title(namaLengkap)
+//                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_pedagang)))
+
                                     if (marker != null) {
                                         marker.tag = userId
                                     } // Attach userId to marker for later use
