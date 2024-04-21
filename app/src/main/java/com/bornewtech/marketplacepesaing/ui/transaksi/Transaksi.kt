@@ -8,6 +8,7 @@ import com.bornewtech.marketplacepesaing.data.adapter.AdapterTransaksi
 import com.bornewtech.marketplacepesaing.data.firestoreDb.CartItem
 import com.bornewtech.marketplacepesaing.data.firestoreDb.Transaction
 import com.bornewtech.marketplacepesaing.databinding.ActivityTransaksiBinding
+import com.bornewtech.marketplacepesaing.ui.cart.produk.Keranjang
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,6 +26,10 @@ class Transaksi : AppCompatActivity() {
         binding = ActivityTransaksiBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+
+        binding.imageCloseBilling.setOnClickListener {
+            startActivity(Intent(this, Keranjang::class.java))
+        }
 
         authUser = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()

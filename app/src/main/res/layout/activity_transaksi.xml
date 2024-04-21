@@ -46,30 +46,30 @@
         </androidx.appcompat.widget.Toolbar>
 
 
-        <TextView
-            android:id="@+id/tvPaymentMethods"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Metode Pembayaran"
-            android:fontFamily="@font/roboto_bold"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/toolbarBilling"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            android:layout_marginTop="10dp"/>
+<!--        <TextView-->
+<!--            android:id="@+id/tvPaymentMethods"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Metode Pembayaran"-->
+<!--            android:fontFamily="@font/roboto_bold"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/toolbarBilling"-->
+<!--            app:layout_constraintStart_toStartOf="@id/leftGuideline"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="15sp"-->
+<!--            android:layout_marginTop="10dp"/>-->
 
-        <TextView
-            android:id="@+id/tvPaymentExplanation"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Di platform ini anda hanya bisa melakukan pembayaran tunai (cash)"
-            android:fontFamily="@font/roboto_medium"
-            app:layout_constraintTop_toBottomOf="@id/tvPaymentMethods"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/tvPaymentExplanation"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Di platform ini anda hanya bisa melakukan pembayaran tunai (cash)"-->
+<!--            android:fontFamily="@font/roboto_medium"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tvPaymentMethods"-->
+<!--            app:layout_constraintStart_toStartOf="@id/leftGuideline"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/rightGuideline"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="15sp" />-->
 
         <View
             android:id="@+id/topLine"
@@ -77,7 +77,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/white_background"
-            app:layout_constraintTop_toBottomOf="@id/tvPaymentExplanation"
+            app:layout_constraintTop_toBottomOf="@id/toolbarBilling"
             app:layout_constraintStart_toStartOf="@id/leftGuideline"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline"
             android:backgroundTint="@color/gray200"

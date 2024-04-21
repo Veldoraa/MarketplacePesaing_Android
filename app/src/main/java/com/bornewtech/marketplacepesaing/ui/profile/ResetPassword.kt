@@ -15,6 +15,11 @@ class ResetPassword : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityResetPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
+
+        binding.imageCloseResetPw.setOnClickListener {
+            startActivity(Intent(this, Profil::class.java))
+        }
 
         auth = FirebaseAuth.getInstance()
         binding.btnKonfResetPassword.setOnClickListener {

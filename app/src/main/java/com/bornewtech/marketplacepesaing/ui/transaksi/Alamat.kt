@@ -42,6 +42,10 @@ class Alamat : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
+        binding.imageAddressClose.setOnClickListener {
+            startActivity(Intent(this, Transaksi::class.java))
+        }
+
         setData()
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
