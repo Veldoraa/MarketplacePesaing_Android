@@ -266,7 +266,7 @@ class Maps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickLis
                     if (lat != null && lng != null && userId != null) {
                         // Calculate distance between user and pedagang using Haversine formula
                         val distance = calculateDistance(currentUserLocation.latitude, currentUserLocation.longitude, lat, lng)
-                        if (distance <= 50000) { // Check if within 500 meters radius
+                        if (distance >= 1000) { // Cek jika dengan jarak 1000 meters radius
                             // Retrieve namaLengkap from Firestore
                             firestore.collection("Pedagang").document(userId)
                                 .get()
